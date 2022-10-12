@@ -1,4 +1,6 @@
 import 'package:dictionary/app/core/rest_client/rest_client.dart';
+import 'package:dictionary/app/models/dictionary_word_model.dart';
+import 'package:dictionary/app/models/response_model.dart';
 import 'package:dictionary/app/models/word_model.dart';
 import 'package:dictionary/app/repositories/words/words_repository.dart';
 import 'package:get/get.dart';
@@ -43,5 +45,27 @@ class WordsRepositoryImpl implements WordsRepository {
   @override
   Future<void> saveWordsToCache(List<WordModel> words) async {
     await _wordsBox.addAll(words);
+  }
+
+  @override
+  Future<ResponseModel?> getWordFromDictionary(WordModel item) async {
+    try {
+      final result = await _restClient.get(
+        'https://api.dictionaryapi.dev/api/v2/entries/en/${item.word}',
+      );
+
+      final response = ResponseModel(
+        statusCode: result.statusCode!.toInt(),
+        message: result.statusText.toString(),
+      );
+      if (result.statusCode == 200) {
+        response.body = DictionaryWordModel.fromMap(result.body.first);
+      } else {
+        response.body = null;
+      }
+      return response;
+    } catch (e) {
+      return null;
+    }
   }
 }

@@ -73,4 +73,9 @@ class HomeController extends GetxController with LoaderMixin {
       curve: Curves.ease,
     );
   }
+
+  void getWordFromDictionary(WordModel item) async {
+    final result = await _wordsRepository.getWordFromDictionary(item);
+    print(result);
+  }
 }

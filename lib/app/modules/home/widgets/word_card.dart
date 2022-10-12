@@ -1,5 +1,6 @@
 import 'package:dictionary/app/core/ui/constants_ui.dart';
 import 'package:dictionary/app/models/word_model.dart';
+import 'package:dictionary/app/modules/home/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -7,10 +8,12 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 class WordCard extends StatelessWidget {
   final WordModel item;
 
-  const WordCard({
+  WordCard({
     super.key,
     required this.item,
   });
+
+  final HomeController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +27,8 @@ class WordCard extends StatelessWidget {
         ),
         child: InkWell(
           onTap: () async {
-            await showModalBottomSheet<void>(
+            controller.getWordFromDictionary(item);
+            /* await showModalBottomSheet<void>(
               context: context,
               builder: (BuildContext context) {
                 return const ModalBottomSheetContent();
@@ -32,7 +36,7 @@ class WordCard extends StatelessWidget {
               clipBehavior: Clip.antiAlias,
               isDismissible: false,
               isScrollControlled: true,
-            );
+            ); */
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),
