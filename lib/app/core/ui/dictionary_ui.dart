@@ -9,7 +9,7 @@ class DictionaryUi {
     primarySwatch: Palette.palette,
     primaryColor: ConstantsUi.kPrimaryColor,
     primaryColorDark: ConstantsUi.kPrimaryColorDark,
-    fontFamily: 'Ubuntu',
+    fontFamily: 'MPLUSRounded1c',
     textTheme: const TextTheme().apply(
       bodyColor: ConstantsUi.kPrimaryColorDark,
     ),
@@ -62,7 +62,7 @@ class DictionaryUi {
       primarySwatch: Palette.palette,
       primaryColor: ConstantsUi.kPrimaryColor,
       primaryColorDark: ConstantsUi.kPrimaryColorDark,
-      fontFamily: 'Ubuntu',
+      fontFamily: 'MPLUSRounded1c',
       textTheme: const TextTheme().apply(
         bodyColor: Colors.white,
       ),

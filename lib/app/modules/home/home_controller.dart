@@ -57,9 +57,11 @@ class HomeController extends GetxController with LoaderMixin {
       if (response != null) {
         wordsList.assignAll(response);
         await _wordsRepository.saveWordsToCache(response);
+        print('from network');
       }
     } else {
       wordsList.assignAll(wordsFromCache);
+      print('from cache');
     }
     _isLoading.toggle();
   }

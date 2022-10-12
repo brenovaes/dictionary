@@ -26,14 +26,14 @@ flutter:
   uses-material-design: true
 
   fonts:
-    - family: Ubuntu
+    - family: MPLUSRounded1c
       fonts:
-        - asset: assets/fonts/Ubuntu/Ubuntu-Light.ttf
+        - asset: assets/fonts/MPLUSRounded1c/MPLUSRounded1c-Light.ttf
           weight: 300
-        - asset: assets/fonts/Ubuntu/Ubuntu-Regular.ttf
+        - asset: assets/fonts/MPLUSRounded1c/MPLUSRounded1c-Regular.ttf
           style: normal
-        - asset: assets/fonts/Ubuntu/Ubuntu-Medium.ttf
+        - asset: assets/fonts/MPLUSRounded1c/MPLUSRounded1c-Medium.ttf
           weight: 500
-        - asset: assets/fonts/Ubuntu/Ubuntu-Bold.ttf
+        - asset: assets/fonts/MPLUSRounded1c/MPLUSRounded1c-Bold.ttf
           weight: 700
 

@@ -1,4 +1,5 @@
 import 'package:dictionary/app/core/ui/constants_ui.dart';
+import 'package:dictionary/app/modules/home/widgets/word_card.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -39,44 +40,12 @@ class HomeView extends GetView<HomeController> {
           Obx(
             () => controller.wordsList.isEmpty
                 ? const Expanded(
-                    child: Center(child: Text('No words found.')),
+                    child: Center(
+                      child: Text('No words found.'),
+                    ),
                   )
                 : Expanded(
-                    child: GridView.count(
-                      controller: controller.scrollController,
-                      crossAxisCount: 3,
-                      physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.all(8),
-                      crossAxisSpacing: 8,
-                      mainAxisSpacing: 8,
-                      children: controller.wordsList
-                          .map((item) => Material(
-                                child: Ink(
-                                  decoration: const BoxDecoration(
-                                    color: ConstantsUi.kPrimaryColor,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(8),
-                                    ),
-                                  ),
-                                  child: InkWell(
-                                    onTap: () {},
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Center(
-                                        child: Text(
-                                          item.word,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ))
-                          .toList(),
-                    ),
+                    child: WordsList(controller: controller),
                   ),
           )
         ],
@@ -94,6 +63,32 @@ class HomeView extends GetView<HomeController> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class WordsList extends StatelessWidget {
+  const WordsList({
+    super.key,
+    required this.controller,
+  });
+
+  final HomeController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.count(
+      controller: controller.scrollController,
+      crossAxisCount: 3,
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.all(8),
+      crossAxisSpacing: 8,
+      mainAxisSpacing: 8,
+      children: controller.wordsList
+          .map(
+            (item) => WordCard(item: item),
+          )
+          .toList(),
     );
   }
 }
