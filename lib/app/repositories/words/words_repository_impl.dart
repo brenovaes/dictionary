@@ -19,8 +19,8 @@ class WordsRepositoryImpl implements WordsRepository {
         _wordsBox = Get.find();
 
   @override
-  Future<List<Word>> getAllWordsFromCache() async =>
-      _wordsBox.toMap().values.toList();
+  Future<List<Word>> getWordsFromCache({int offset = 0}) async =>
+      _wordsBox.valuesBetween(startKey: offset, endKey: offset + 29).toList();
 
   @override
   Future<List<Word>?> getAllWordsFromNetwork() async {
@@ -79,7 +79,6 @@ class WordsRepositoryImpl implements WordsRepository {
       await _historyBox.add(item);
       return true;
     } catch (e) {
-      print(e);
       return false;
     }
   }

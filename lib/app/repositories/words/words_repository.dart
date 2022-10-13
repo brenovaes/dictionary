@@ -3,7 +3,7 @@ import 'package:dictionary/app/models/response_model.dart';
 import 'package:dictionary/app/models/word_model.dart';
 
 abstract class WordsRepository {
-  Future<List<Word>> getAllWordsFromCache();
+  Future<List<Word>> getWordsFromCache({int offset});
 
   Future<List<Word>?> getAllWordsFromNetwork();
 

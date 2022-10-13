@@ -14,8 +14,16 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     controller.scrollController.addListener(
       () {
+        var nextPageTrigger =
+            controller.scrollController.position.maxScrollExtent;
+
         var showScrollToTopButton =
             controller.scrollController.position.viewportDimension + 1;
+
+        if (controller.scrollController.position.pixels > nextPageTrigger &&
+            controller.choice == 0) {
+          controller.fetchMoreData();
+        }
 
         controller.showScrollToTopButton =
             controller.scrollController.position.pixels > showScrollToTopButton

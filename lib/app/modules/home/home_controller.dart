@@ -25,6 +25,10 @@ class HomeController extends GetxController with LoaderMixin {
   bool get showScrollToTopButton => _showScrollToTopButton.value;
   set showScrollToTopButton(bool value) => _showScrollToTopButton.value = value;
 
+  final _count = 0.obs;
+  int get count => _count.value;
+  set count(value) => _count.value = value;
+
   final _choice = 0.obs;
   int get choice => _choice.value;
   set choice(value) => _choice.value = value;
@@ -56,7 +60,7 @@ class HomeController extends GetxController with LoaderMixin {
   @override
   void onReady() async {
     super.onReady();
-    getAllWordsFromCache();
+    getWordsFromCache();
   }
 
   @override
@@ -66,22 +70,21 @@ class HomeController extends GetxController with LoaderMixin {
   }
 
   // Métodos
-  void getAllWordsFromCache() async {
+  void getWordsFromCache() async {
+    List<Word>? wordsFromCache;
     isLoading.toggle();
 
-    final wordsFromCache = await _wordsRepository.getAllWordsFromCache();
+    wordsFromCache = await _wordsRepository.getWordsFromCache();
 
     if (wordsFromCache.isEmpty) {
       final response = await _wordsRepository.getAllWordsFromNetwork();
       if (response != null) {
-        wordsList.assignAll(response);
         await _wordsRepository.saveWordsToCache(response);
-        print('from network');
+        wordsFromCache = await _wordsRepository.getWordsFromCache();
       }
-    } else {
-      wordsList.assignAll(wordsFromCache);
-      print('from cache');
     }
+    count += wordsFromCache.length;
+    wordsList.addAll(wordsFromCache);
     isLoading.toggle();
   }
 
@@ -148,4 +151,15 @@ class HomeController extends GetxController with LoaderMixin {
 
   Future<void> saveNewFavorite(DictionaryWord item) async =>
       await _wordsRepository.saveNewFavorite(item);
+
+  Future<void> fetchMoreData() async {
+    if (isLoading.isFalse) {
+      isLoading.toggle();
+      final wordsQuery =
+          await _wordsRepository.getWordsFromCache(offset: count);
+      isLoading.toggle();
+      count += wordsQuery.length;
+      wordsList.addAll(wordsQuery);
+    }
+  }
 }
