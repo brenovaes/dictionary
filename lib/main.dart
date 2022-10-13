@@ -1,5 +1,9 @@
 import 'package:dictionary/app/core/bindings/application_bindings.dart';
 import 'package:dictionary/app/core/ui/dictionary_ui.dart';
+import 'package:dictionary/app/models/definition_model.dart';
+import 'package:dictionary/app/models/dictionary_word_model.dart';
+import 'package:dictionary/app/models/meaning_model.dart';
+import 'package:dictionary/app/models/phonetic_model.dart';
 import 'package:dictionary/app/models/word_model.dart';
 import 'package:flutter/material.dart';
 
@@ -11,13 +15,31 @@ import 'app/routes/app_pages.dart';
 Future<void> _initHive() async {
   await Hive.initFlutter();
 
-  Hive.registerAdapter(WordModelAdapter());
+  Hive.registerAdapter(WordAdapter());
+  Hive.registerAdapter(DictionaryWordAdapter());
+  Hive.registerAdapter(DefinitionAdapter());
+  Hive.registerAdapter(MeaningAdapter());
+  Hive.registerAdapter(PhoneticAdapter());
 
-  Box<WordModel> wordsBox = await Hive.openBox<WordModel>('words');
+  Box<Word> wordsBox = await Hive.openBox<Word>('words');
+  Box<DictionaryWord> favoritesBox =
+      await Hive.openBox<DictionaryWord>('favorites');
+  Box<DictionaryWord> historyBox =
+      await Hive.openBox<DictionaryWord>('history');
 
-  Get.put<Box<WordModel>>(
+  Get.put<Box<Word>>(
     wordsBox,
     permanent: true,
+  );
+  Get.put<Box<DictionaryWord>>(
+    favoritesBox,
+    permanent: true,
+    tag: 'favorites',
+  );
+  Get.put<Box<DictionaryWord>>(
+    historyBox,
+    permanent: true,
+    tag: 'history',
   );
 }
 

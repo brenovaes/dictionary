@@ -2,14 +2,14 @@ import 'package:hive/hive.dart';
 part 'word_model.g.dart';
 
 @HiveType(typeId: 0)
-class WordModel extends HiveObject {
+class Word extends HiveObject {
   @HiveField(0)
   String word;
 
-  WordModel({
+  Word({
     required this.word,
   });
 
   @override
-  String toString() => 'WordModel(word: $word)';
+  String toString() => 'Word(word: $word)';
 }

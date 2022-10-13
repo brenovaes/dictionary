@@ -1,32 +1,38 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'word_model.dart';
+part of 'phonetic_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class WordAdapter extends TypeAdapter<Word> {
+class PhoneticAdapter extends TypeAdapter<Phonetic> {
   @override
-  final int typeId = 0;
+  final int typeId = 2;
 
   @override
-  Word read(BinaryReader reader) {
+  Phonetic read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Word(
-      word: fields[0] as String,
+    return Phonetic(
+      text: fields[0] as String?,
+      audio: fields[1] as String,
+      sourceUrl: fields[2] as String?,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Word obj) {
+  void write(BinaryWriter writer, Phonetic obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(3)
       ..writeByte(0)
-      ..write(obj.word);
+      ..write(obj.text)
+      ..writeByte(1)
+      ..write(obj.audio)
+      ..writeByte(2)
+      ..write(obj.sourceUrl);
   }
 
   @override
@@ -35,7 +41,7 @@ class WordAdapter extends TypeAdapter<Word> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is WordAdapter &&
+      other is PhoneticAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

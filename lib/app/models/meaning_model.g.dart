@@ -1,44 +1,41 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'dictionary_word_model.dart';
+part of 'meaning_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class DictionaryWordAdapter extends TypeAdapter<DictionaryWord> {
+class MeaningAdapter extends TypeAdapter<Meaning> {
   @override
-  final int typeId = 1;
+  final int typeId = 3;
 
   @override
-  DictionaryWord read(BinaryReader reader) {
+  Meaning read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return DictionaryWord(
-      word: fields[0] as String,
-      phonetic: fields[1] as String?,
-      phonetics: (fields[2] as List).cast<Phonetic?>(),
-      meanings: (fields[3] as List).cast<Meaning>(),
-      sourceUrls: (fields[4] as List).cast<String>(),
+    return Meaning(
+      partOfSpeech: fields[0] as String,
+      definitions: (fields[1] as List).cast<Definition>(),
+      synonyms: (fields[2] as List).cast<String>(),
+      antonyms: (fields[3] as List).cast<String>(),
     );
   }
 
   @override
-  void write(BinaryWriter writer, DictionaryWord obj) {
+  void write(BinaryWriter writer, Meaning obj) {
     writer
-      ..writeByte(5)
-      ..writeByte(0)
-      ..write(obj.word)
-      ..writeByte(1)
-      ..write(obj.phonetic)
-      ..writeByte(2)
-      ..write(obj.phonetics)
-      ..writeByte(3)
-      ..write(obj.meanings)
       ..writeByte(4)
-      ..write(obj.sourceUrls);
+      ..writeByte(0)
+      ..write(obj.partOfSpeech)
+      ..writeByte(1)
+      ..write(obj.definitions)
+      ..writeByte(2)
+      ..write(obj.synonyms)
+      ..writeByte(3)
+      ..write(obj.antonyms);
   }
 
   @override
@@ -47,7 +44,7 @@ class DictionaryWordAdapter extends TypeAdapter<DictionaryWord> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is DictionaryWordAdapter &&
+      other is MeaningAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

@@ -21,7 +21,7 @@ class CustomChoiceChip extends StatelessWidget {
       () => ChoiceChip(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        onSelected: (value) => controller.choice = index,
+        onSelected: (value) => controller.onSelectedChoice(value, index),
         selected: controller.choice == index,
         label: Text(
           chipsLabels[index],

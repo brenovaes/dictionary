@@ -1,9 +1,9 @@
-import 'package:dictionary/app/core/ui/constants_ui.dart';
-import 'package:dictionary/app/modules/home/widgets/word_card.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+
+import 'package:dictionary/app/core/ui/constants_ui.dart';
+import 'package:dictionary/app/modules/home/widgets/word_card.dart';
 
 import 'home_controller.dart';
 import 'widgets/custom_choice_chip.dart';
@@ -38,15 +38,32 @@ class HomeView extends GetView<HomeController> {
             height: 8,
           ),
           Obx(
-            () => controller.wordsList.isEmpty
-                ? const Expanded(
-                    child: Center(
-                      child: Text('No words found.'),
-                    ),
-                  )
-                : Expanded(
-                    child: WordsList(controller: controller),
-                  ),
+            () {
+              List<dynamic> list;
+              switch (controller.choice) {
+                case 0:
+                  list = controller.wordsList;
+                  break;
+                case 1:
+                  list = controller.historyList;
+                  break;
+                default:
+                  list = controller.favoritesList;
+                  break;
+              }
+              return list.isEmpty
+                  ? const Expanded(
+                      child: Center(
+                        child: Text('No words found.'),
+                      ),
+                    )
+                  : Expanded(
+                      child: WordsList(
+                        controller: controller,
+                        list: list,
+                      ),
+                    );
+            },
           )
         ],
       ),
@@ -68,12 +85,14 @@ class HomeView extends GetView<HomeController> {
 }
 
 class WordsList extends StatelessWidget {
+  final HomeController controller;
+  final List<dynamic> list;
+
   const WordsList({
     super.key,
     required this.controller,
+    required this.list,
   });
-
-  final HomeController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +103,7 @@ class WordsList extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       crossAxisSpacing: 8,
       mainAxisSpacing: 8,
-      children: controller.wordsList
+      children: list
           .map(
             (item) => WordCard(item: item),
           )

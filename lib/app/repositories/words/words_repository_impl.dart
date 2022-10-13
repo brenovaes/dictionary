@@ -8,18 +8,22 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 class WordsRepositoryImpl implements WordsRepository {
   final RestClient _restClient;
-  final Box<WordModel> _wordsBox;
+  final Box<Word> _wordsBox;
+  final Box<DictionaryWord> _favoritesBox;
+  final Box<DictionaryWord> _historyBox;
 
   WordsRepositoryImpl({required RestClient restClient})
       : _restClient = restClient,
+        _favoritesBox = Get.find(tag: 'favorites'),
+        _historyBox = Get.find(tag: 'history'),
         _wordsBox = Get.find();
 
   @override
-  Future<List<WordModel>> getAllWordsFromCache() async =>
+  Future<List<Word>> getAllWordsFromCache() async =>
       _wordsBox.toMap().values.toList();
 
   @override
-  Future<List<WordModel>?> getAllWordsFromNetwork() async {
+  Future<List<Word>?> getAllWordsFromNetwork() async {
     try {
       final result = await _restClient.get(
         'https://raw.githubusercontent.com/meetDeveloper/freeDictionaryAPI/master/meta/wordList/english.txt',
@@ -28,10 +32,10 @@ class WordsRepositoryImpl implements WordsRepository {
       if (result.statusCode == 200) {
         final words = result.body.split('\n');
 
-        final parsedWords = <WordModel>[];
+        final parsedWords = <Word>[];
 
         for (var word in words) {
-          parsedWords.add(WordModel(word: word.toString()));
+          parsedWords.add(Word(word: word.toString()));
         }
 
         return parsedWords;
@@ -43,15 +47,15 @@ class WordsRepositoryImpl implements WordsRepository {
   }
 
   @override
-  Future<void> saveWordsToCache(List<WordModel> words) async {
+  Future<void> saveWordsToCache(List<Word> words) async {
     await _wordsBox.addAll(words);
   }
 
   @override
-  Future<ResponseModel?> getWordFromDictionary(WordModel item) async {
+  Future<ResponseModel?> getWordFromDictionary(String item) async {
     try {
       final result = await _restClient.get(
-        'https://api.dictionaryapi.dev/api/v2/entries/en/${item.word}',
+        'https://api.dictionaryapi.dev/api/v2/entries/en/$item',
       );
 
       final response = ResponseModel(
@@ -59,7 +63,7 @@ class WordsRepositoryImpl implements WordsRepository {
         message: result.statusText.toString(),
       );
       if (result.statusCode == 200) {
-        response.body = DictionaryWordModel.fromMap(result.body.first);
+        response.body = DictionaryWord.fromMap(result.body.first);
       } else {
         response.body = null;
       }
@@ -68,4 +72,54 @@ class WordsRepositoryImpl implements WordsRepository {
       return null;
     }
   }
+
+  @override
+  Future<bool> saveDictionaryWordToCache(DictionaryWord item) async {
+    try {
+      await _historyBox.add(item);
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  @override
+  Future<List<DictionaryWord>> findWord(String wordToSearch, String box) async {
+    final useBox = box == 'favorites' ? _favoritesBox : _historyBox;
+    return useBox
+        .toMap()
+        .values
+        .where((word) => word.word == wordToSearch)
+        .toList();
+  }
+
+  @override
+  Future<void> saveNewItemToHistory(DictionaryWord item) async =>
+      await _historyBox.add(item);
+
+  @override
+  Future<List<DictionaryWord>> getAllFromHistory() async =>
+      _historyBox.toMap().values.toList();
+
+  @override
+  Future<void> saveNewFavorite(DictionaryWord item) async {
+    /* O Hive não permite salvar o mesmo objeto em mais de uma box; criando um novo objeto baseado no anterior.*/
+    var newWord = DictionaryWord(
+      word: item.word,
+      phonetic: item.phonetic,
+      phonetics: item.phonetics,
+      meanings: item.meanings,
+      sourceUrls: item.sourceUrls,
+    );
+    await _favoritesBox.add(newWord);
+  }
+
+  @override
+  Future<void> removeFromFavorites(DictionaryWord item) async =>
+      await item.delete();
+
+  @override
+  Future<List<DictionaryWord>> getAllFromFavorites() async =>
+      _favoritesBox.toMap().values.toList();
 }

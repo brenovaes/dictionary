@@ -1,4 +1,5 @@
 import 'package:dictionary/app/core/mixins/loader_mixin.dart';
+import 'package:dictionary/app/models/dictionary_word_model.dart';
 import 'package:dictionary/app/models/word_model.dart';
 import 'package:dictionary/app/repositories/words/words_repository.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,9 @@ class HomeController extends GetxController with LoaderMixin {
 
   // Variáveis observáveis
   final isLoading = false.obs;
-  final wordsList = <WordModel>[].obs;
+  final wordsList = <Word>[].obs;
+  final historyList = <DictionaryWord>[].obs;
+  final favoritesList = <DictionaryWord>[].obs;
 
   // Outras variáveis
   late final ScrollController scrollController;
@@ -30,8 +33,17 @@ class HomeController extends GetxController with LoaderMixin {
   double get audioProgressValue => _audioProgressValue.value;
   set audioProgressValue(value) => _audioProgressValue.value = value;
 
-  //Métodos onChanged
+  //Métodos de validação
   onChangedAudioProgress(value) => audioProgressValue = value;
+
+  onSelectedChoice(value, index) async {
+    if (index == 1) {
+      await getAllFromHistory();
+    } else if (index == 2) {
+      await getAllFromFavorites();
+    }
+    choice = index;
+  }
 
   // Métodos sobrescritos
   @override
@@ -81,8 +93,26 @@ class HomeController extends GetxController with LoaderMixin {
     );
   }
 
-  Future<Map<String, dynamic>> getWordFromDictionary(WordModel item) async {
-    final result = await _wordsRepository.getWordFromDictionary(item);
+  Future<void> getAllFromHistory() async {
+    isLoading.toggle();
+    final history = await _wordsRepository.getAllFromHistory();
+    history.sort((DictionaryWord a, DictionaryWord b) =>
+        a.word.toLowerCase().compareTo(b.word.toLowerCase()));
+    historyList.assignAll(history);
+    isLoading.toggle();
+  }
+
+  Future<void> getAllFromFavorites() async {
+    isLoading.toggle();
+    final favorites = await _wordsRepository.getAllFromFavorites();
+    favorites.sort((DictionaryWord a, DictionaryWord b) =>
+        a.word.toLowerCase().compareTo(b.word.toLowerCase()));
+    favoritesList.assignAll(favorites);
+    isLoading.toggle();
+  }
+
+  Future<Map<String, dynamic>> getWordFromDictionary(String word) async {
+    final result = await _wordsRepository.getWordFromDictionary(word);
     final response = <String, dynamic>{};
     if (result!.statusCode == 200) {
       response.addAll({
@@ -102,4 +132,20 @@ class HomeController extends GetxController with LoaderMixin {
     }
     return response;
   }
+
+  Future<void> saveNewItemToHistory(DictionaryWord item) async {
+    final isViewed = await findWord(item.word, 'history');
+    if (isViewed.isEmpty) {
+      await _wordsRepository.saveNewItemToHistory(item);
+    }
+  }
+
+  Future<List<DictionaryWord>> findWord(String word, String box) async =>
+      await _wordsRepository.findWord(word, box);
+
+  Future<void> removeFromFavorites(DictionaryWord item) async =>
+      await _wordsRepository.removeFromFavorites(item);
+
+  Future<void> saveNewFavorite(DictionaryWord item) async =>
+      await _wordsRepository.saveNewFavorite(item);
 }

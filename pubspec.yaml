@@ -17,6 +17,7 @@ dependencies:
   phosphor_flutter: ^1.4.0
   build_runner: ^2.3.0
   just_audio: ^0.9.29
+  collection: ^1.16.0
 
 dev_dependencies: 
   flutter_lints: ^2.0.0
