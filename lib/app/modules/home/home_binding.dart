@@ -12,9 +12,10 @@ class HomeBinding extends Bindings {
         restClient: Get.find(),
       ),
     );
-    Get.lazyPut<HomeController>(
-      () => HomeController(
+    Get.put<HomeController>(
+      HomeController(
         wordsRepository: Get.find<WordsRepository>(),
+        settingsRepository: Get.find(),
       ),
     );
   }

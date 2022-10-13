@@ -36,4 +36,4 @@ $ cd dictionary
 $ flutter pub run
 ```
 
-This is a challenge by [Coodesh](https://coodesh.com/)
+> This is a challenge by [Coodesh](https://coodesh.com/)

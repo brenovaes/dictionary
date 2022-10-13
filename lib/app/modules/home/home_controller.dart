@@ -1,15 +1,20 @@
 import 'package:dictionary/app/core/mixins/loader_mixin.dart';
 import 'package:dictionary/app/models/dictionary_word_model.dart';
 import 'package:dictionary/app/models/word_model.dart';
+import 'package:dictionary/app/repositories/settings/settings_repository.dart';
 import 'package:dictionary/app/repositories/words/words_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController with LoaderMixin {
   final WordsRepository _wordsRepository;
+  final SettingsRepository _settingsRepository;
 
-  HomeController({required wordsRepository})
-      : _wordsRepository = wordsRepository;
+  HomeController({
+    required wordsRepository,
+    required SettingsRepository settingsRepository,
+  })  : _wordsRepository = wordsRepository,
+        _settingsRepository = settingsRepository;
 
   // Variáveis observáveis
   final isLoading = false.obs;
@@ -20,7 +25,7 @@ class HomeController extends GetxController with LoaderMixin {
   // Outras variáveis
   late final ScrollController scrollController;
 
-  // Variáveis observáveis com getters e setters
+  // Variáveis observáveis com getters e/ou setters
   final _showScrollToTopButton = false.obs;
   bool get showScrollToTopButton => _showScrollToTopButton.value;
   set showScrollToTopButton(bool value) => _showScrollToTopButton.value = value;
@@ -36,6 +41,10 @@ class HomeController extends GetxController with LoaderMixin {
   final _audioProgressValue = 0.0.obs;
   double get audioProgressValue => _audioProgressValue.value;
   set audioProgressValue(value) => _audioProgressValue.value = value;
+
+  final _theme = RxnString();
+  String? get theme => _theme.value;
+  set theme(value) => _theme.value = value;
 
   //Métodos de validação
   onChangedAudioProgress(value) => audioProgressValue = value;
@@ -60,7 +69,8 @@ class HomeController extends GetxController with LoaderMixin {
   @override
   void onReady() async {
     super.onReady();
-    getWordsFromCache();
+    await getWordsFromCache();
+    getPreferences();
   }
 
   @override
@@ -70,7 +80,7 @@ class HomeController extends GetxController with LoaderMixin {
   }
 
   // Métodos
-  void getWordsFromCache() async {
+  Future<void> getWordsFromCache() async {
     List<Word>? wordsFromCache;
     isLoading.toggle();
 
@@ -161,5 +171,15 @@ class HomeController extends GetxController with LoaderMixin {
       count += wordsQuery.length;
       wordsList.addAll(wordsQuery);
     }
+  }
+
+  void getPreferences() {
+    Map<String, dynamic> preferences = _settingsRepository.getSettings();
+    _theme(preferences['theme']);
+    //_language(preferences['language']);
+  }
+
+  void setPreference(String key, value) {
+    _settingsRepository.saveSetting(key, value);
   }
 }

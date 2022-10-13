@@ -35,6 +35,40 @@ class HomeView extends GetView<HomeController> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dictionary'),
+        actions: [
+          PopupMenuButton(
+            icon: Icon(
+              PhosphorIcons.dotsThreeVertical,
+              color: Theme.of(context).appBarTheme.titleTextStyle?.color,
+            ),
+            onSelected: (value) {
+              switch (value) {
+                case 'theme':
+                  _buildThemeDialog();
+                  break;
+                case 'language':
+                  //_buildLanguageDialog();
+                  break;
+              }
+            },
+            itemBuilder: (BuildContext context) => [
+              const PopupMenuItem(
+                value: 'theme',
+                child: ListTile(
+                  leading: Icon(PhosphorIcons.moonFill),
+                  title: Text('Change theme'),
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'language',
+                child: ListTile(
+                  leading: Icon(PhosphorIcons.translate),
+                  title: Text('Change language'),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -88,6 +122,74 @@ class HomeView extends GetView<HomeController> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<dynamic> _buildThemeDialog() async {
+    final String? backupThemeChoice = controller.theme;
+    return Get.dialog(
+      WillPopScope(
+        onWillPop: () async => false,
+        child: AlertDialog(
+          title: const Text('Choose theme'),
+          content: Obx(
+            () => Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                RadioListTile(
+                  value: 'light',
+                  groupValue: controller.theme,
+                  title: const Text('Light'),
+                  onChanged: (value) => controller.theme = value,
+                ),
+                RadioListTile(
+                  value: 'dark',
+                  groupValue: controller.theme,
+                  title: const Text('Dark'),
+                  onChanged: (value) => controller.theme = value,
+                ),
+                RadioListTile(
+                  value: 'system',
+                  groupValue: controller.theme,
+                  title: const Text('Match system\'s theme'),
+                  onChanged: (value) => controller.theme = value,
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                controller.theme = backupThemeChoice;
+                Get.close(1);
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                controller.setPreference(
+                  'theme',
+                  controller.theme,
+                );
+                switch (controller.theme) {
+                  case 'light':
+                    Get.changeThemeMode(ThemeMode.light);
+                    break;
+                  case 'dark':
+                    Get.changeThemeMode(ThemeMode.dark);
+                    break;
+                  default:
+                    Get.changeThemeMode(ThemeMode.system);
+                    break;
+                }
+                Get.close(1);
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        ),
+      ),
+      barrierDismissible: false,
     );
   }
 }
