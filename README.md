@@ -1,16 +1,39 @@
-# dictionary
 
-A new Flutter project for Coodesh.
+# Mobile Challenge 🏅 2022
 
-## Getting Started
+## Dictionary
 
-This project is a starting point for a Flutter application.
+Este é um aplicativo desenvolvido para ajudá-lo a ter acesso rápido a palavras em inglês, além da fonética e dos significados das mesmas. O usuário também pode ter acesso às palavras visualizadas anteriormente e a funcionalidade de escolher palavras favoritas, que também ficarão disponíveis para acesso rápido.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Tecnologias utilizadas
+
+- [Flutter][flutter] - Desenvolvimento mobile multiplataforma
+- [GetX][get] - Gerenciamento de estados, gerenciamento de rotas e injeção de dependências
+- [Hive][hive] - Gestão/armazenamento de dados
+- [GetConnect][get] - Cliente HTTP
+- [JustAudio][just_audio] - Player de áudio
+- [Phosphor Icons][phosphor] - Pacote de ícones
+
+
+[flutter]: https://flutter.dev
+[get]: https://pub.dev/packages/get
+[hive]: https://pub.dev/packages/hive
+[just_audio]: https://pub.dev/packages/just_audio
+[phosphor]: https://phosphoricons.com/
+
+
+### Executando o projeto
+```bash
+# Clonar o projeto
+$ git clone https://github.com/brenovaes/dictionary.git
+
+# Acesse a pasta
+$ cd dictionary
+
+# Rodar o projeto.
+$ flutter pub run
+```
+
+This is a challenge by [Coodesh](https://coodesh.com/)
