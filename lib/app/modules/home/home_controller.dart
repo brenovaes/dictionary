@@ -11,7 +11,7 @@ class HomeController extends GetxController with LoaderMixin {
       : _wordsRepository = wordsRepository;
 
   // Variáveis observáveis
-  final _isLoading = false.obs;
+  final isLoading = false.obs;
   final wordsList = <WordModel>[].obs;
 
   // Outras variáveis
@@ -26,11 +26,18 @@ class HomeController extends GetxController with LoaderMixin {
   int get choice => _choice.value;
   set choice(value) => _choice.value = value;
 
+  final _audioProgressValue = 0.0.obs;
+  double get audioProgressValue => _audioProgressValue.value;
+  set audioProgressValue(value) => _audioProgressValue.value = value;
+
+  //Métodos onChanged
+  onChangedAudioProgress(value) => audioProgressValue = value;
+
   // Métodos sobrescritos
   @override
   void onInit() {
     super.onInit();
-    loaderListener(_isLoading);
+    loaderListener(isLoading);
     scrollController = ScrollController();
   }
 
@@ -48,7 +55,7 @@ class HomeController extends GetxController with LoaderMixin {
 
   // Métodos
   void getAllWordsFromCache() async {
-    _isLoading.toggle();
+    isLoading.toggle();
 
     final wordsFromCache = await _wordsRepository.getAllWordsFromCache();
 
@@ -63,7 +70,7 @@ class HomeController extends GetxController with LoaderMixin {
       wordsList.assignAll(wordsFromCache);
       print('from cache');
     }
-    _isLoading.toggle();
+    isLoading.toggle();
   }
 
   void scrollToTop() {
@@ -74,8 +81,25 @@ class HomeController extends GetxController with LoaderMixin {
     );
   }
 
-  void getWordFromDictionary(WordModel item) async {
+  Future<Map<String, dynamic>> getWordFromDictionary(WordModel item) async {
     final result = await _wordsRepository.getWordFromDictionary(item);
-    print(result);
+    final response = <String, dynamic>{};
+    if (result!.statusCode == 200) {
+      response.addAll({
+        'status': true,
+        'body': result.body,
+      });
+    } else if (result.statusCode == 404) {
+      response.addAll({
+        'status': false,
+        'body': null,
+      });
+    } else {
+      response.addAll({
+        'status': null,
+        'body': result.body,
+      });
+    }
+    return response;
   }
 }

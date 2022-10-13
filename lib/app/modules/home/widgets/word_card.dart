@@ -1,9 +1,16 @@
-import 'package:dictionary/app/core/ui/constants_ui.dart';
-import 'package:dictionary/app/models/word_model.dart';
-import 'package:dictionary/app/modules/home/home_controller.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+
+import 'package:dictionary/app/core/ui/constants_ui.dart';
+import 'package:dictionary/app/models/dictionary_word_model.dart';
+import 'package:dictionary/app/models/word_model.dart';
+import 'package:dictionary/app/modules/home/home_controller.dart';
 
 class WordCard extends StatelessWidget {
   final WordModel item;
@@ -27,16 +34,31 @@ class WordCard extends StatelessWidget {
         ),
         child: InkWell(
           onTap: () async {
-            controller.getWordFromDictionary(item);
-            /* await showModalBottomSheet<void>(
-              context: context,
-              builder: (BuildContext context) {
-                return const ModalBottomSheetContent();
-              },
-              clipBehavior: Clip.antiAlias,
-              isDismissible: false,
-              isScrollControlled: true,
-            ); */
+            controller.isLoading.toggle();
+            final data = await controller.getWordFromDictionary(item);
+            controller.isLoading.toggle();
+            print(data);
+            if (data['status'] == true) {
+              await showModalBottomSheet<void>(
+                context: context,
+                builder: (BuildContext context) {
+                  return ModalBottomSheetContent(
+                    item: data['body'],
+                    controller: controller,
+                  );
+                },
+                clipBehavior: Clip.antiAlias,
+                isDismissible: false,
+                isScrollControlled: true,
+              );
+            } else if (data['status'] == false) {
+              const snackBar = SnackBar(
+                content: Text(
+                  'No definition found for this word/phrase.',
+                ),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            }
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -56,10 +78,36 @@ class WordCard extends StatelessWidget {
   }
 }
 
-class ModalBottomSheetContent extends StatelessWidget {
-  const ModalBottomSheetContent({
+class ModalBottomSheetContent extends StatefulWidget {
+  DictionaryWordModel item;
+  HomeController controller;
+
+  ModalBottomSheetContent({
     super.key,
+    required this.item,
+    required this.controller,
   });
+
+  @override
+  State<ModalBottomSheetContent> createState() =>
+      _ModalBottomSheetContentState();
+}
+
+class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
+  final player = AudioPlayer();
+  late final duration;
+
+  @override
+  void initState() {
+    super.initState();
+    _initAudioPlayer();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    player.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +117,7 @@ class ModalBottomSheetContent extends StatelessWidget {
       ),
       height: Get.height * 0.80,
       color: Colors.white,
-      child: ListView(
-        physics: const BouncingScrollPhysics(),
+      child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,127 +132,124 @@ class ModalBottomSheetContent extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(
-            height: 8,
-          ),
-          Container(
-            height: 200,
-            width: Get.width,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              color: ConstantsUi.kPrimaryColor,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
-                Text(
-                  'hello',
-                  style: TextStyle(
-                    fontSize: 22,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(
+          Expanded(
+            child: ListView(
+              physics: const BouncingScrollPhysics(),
+              children: [
+                const SizedBox(
                   height: 8,
                 ),
-                Text(
-                  '/həˈləʊ/',
-                  style: TextStyle(
-                    fontSize: 22,
-                    color: Colors.white,
+                Container(
+                  height: 200,
+                  width: Get.width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: ConstantsUi.kPrimaryColor,
                   ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        widget.item.word,
+                        style: const TextStyle(
+                          fontSize: 22,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      widget.item.phonetic != null
+                          ? Text(
+                              widget.item.phonetic.toString(),
+                              style: const TextStyle(
+                                fontSize: 22,
+                                color: Colors.white,
+                              ),
+                            )
+                          : const SizedBox.shrink(),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                widget.item.phonetics.isNotEmpty &&
+                        widget.item.phonetics.first?.audio != null &&
+                        widget.item.phonetics.first?.audio != ''
+                    ? Column(
+                        children: [
+                          const Divider(
+                            thickness: 1,
+                          ),
+                          Row(
+                            children: [
+                              IconButton(
+                                onPressed: () async {
+                                  await player.play();
+                                },
+                                icon: const Icon(PhosphorIcons.playBold),
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Obx(
+                                () => Expanded(
+                                  child: Slider(
+                                    value: widget.controller.audioProgressValue,
+                                    onChanged: (_) {},
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Divider(
+                            thickness: 1,
+                          ),
+                        ],
+                      )
+                    : const SizedBox.shrink(),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: Get.width,
+                    child: const Text(
+                      'Meanings',
+                      style: TextStyle(
+                        fontSize: 22,
+                      ),
+                    ),
+                  ),
+                ),
+                Column(
+                  children: widget.item.meanings.mapIndexed((index, meaning) {
+                    return ExpansionTile(
+                      expandedAlignment: Alignment.centerLeft,
+                      expandedCrossAxisAlignment: CrossAxisAlignment.start,
+                      childrenPadding: const EdgeInsets.all(8),
+                      title: Text(
+                        widget.item.meanings[index].partOfSpeech.capitalizeFirst
+                            .toString(),
+                      ),
+                      children: widget.item.meanings[index].definitions
+                          .map((definition) {
+                        return Text('• ${definition.definition}');
+                      }).toList(),
+                    );
+                  }).toList(),
                 ),
               ],
             ),
           ),
-          const SizedBox(
-            height: 16,
-          ),
-          const Divider(
-            thickness: 1,
-          ),
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(PhosphorIcons.playBold),
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-            ],
-          ),
-          const Divider(
-            thickness: 1,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SizedBox(
-              width: Get.width,
-              child: const Text(
-                'Meanings',
-                style: TextStyle(
-                  fontSize: 22,
-                ),
-              ),
-            ),
-          ),
-          ExpansionTile(
-            expandedAlignment: Alignment.centerLeft,
-            expandedCrossAxisAlignment: CrossAxisAlignment.start,
-            childrenPadding: const EdgeInsets.all(8),
-            title: const Text('Noun'),
-            children: const [
-              Text(
-                '1) A solid or hollow sphere, or roughly spherical mass. (e.g. a ball of spittle; a fecal ball)',
-              ),
-              Text(
-                '2) A round or ellipsoidal object.',
-              ),
-            ],
-          ),
-          ExpansionTile(
-            expandedAlignment: Alignment.centerLeft,
-            expandedCrossAxisAlignment: CrossAxisAlignment.start,
-            childrenPadding: const EdgeInsets.all(8),
-            title: const Text('Verb'),
-            children: const [
-              Text(
-                '1) To form or wind into a ball. (e.g. o ball cotton)',
-              ),
-              Text(
-                '2) To heat in a furnace and form into balls for rolling.',
-              ),
-              Text(
-                '3) To have sexual intercourse with.',
-              ),
-              Text(
-                '4) To gather balls which cling to the feet, as of damp snow or clay; to gather into balls.',
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: const Text('Previous'),
-                ),
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: const Text('Next'),
-                ),
-              ),
-            ],
-          ),
         ],
       ),
+    );
+  }
+
+  void _initAudioPlayer() async {
+    duration = await player.setUrl(
+      widget.item.phonetics.first?.audio as String,
     );
   }
 }
