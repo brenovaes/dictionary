@@ -19,8 +19,29 @@ class WordsRepositoryImpl implements WordsRepository {
         _wordsBox = Get.find();
 
   @override
-  Future<List<Word>> getWordsFromCache({int offset = 0}) async =>
-      _wordsBox.valuesBetween(startKey: offset, endKey: offset + 29).toList();
+  Future<List<Word>> getWordsFromCache(String? filter, {int offset = 0}) async {
+    List<Word> resultList;
+    print(filter);
+    switch (filter) {
+      /* case null:
+        break; */
+      case '':
+        resultList = _wordsBox
+            .valuesBetween(startKey: offset, endKey: offset + 29)
+            .toList();
+        break;
+      default:
+        print('entrei no default');
+        resultList = _wordsBox
+            .toMap()
+            .values
+            /* .valuesBetween(startKey: offset, endKey: offset + 29) */
+            .where((value) => value.word.startsWith(filter.toString()))
+            .toList();
+        break;
+    }
+    return resultList;
+  }
 
   @override
   Future<List<Word>?> getAllWordsFromNetwork() async {

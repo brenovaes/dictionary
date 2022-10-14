@@ -26,6 +26,15 @@ class HomeController extends GetxController with LoaderMixin {
   late final ScrollController scrollController;
 
   // Variáveis observáveis com getters e/ou setters
+  final _filterOption = RxnString('');
+  String? get filterOption => _filterOption.value;
+  set filterOption(value) {
+    count = 0;
+    _filterOption.value = value;
+    getWordsFromCache();
+    scrollToTop();
+  }
+
   final _showScrollToTopButton = false.obs;
   bool get showScrollToTopButton => _showScrollToTopButton.value;
   set showScrollToTopButton(bool value) => _showScrollToTopButton.value = value;
@@ -50,12 +59,16 @@ class HomeController extends GetxController with LoaderMixin {
   onChangedAudioProgress(value) => audioProgressValue = value;
 
   onSelectedChoice(value, index) async {
+    showScrollToTopButton = false;
     if (index == 1) {
       await getAllFromHistory();
     } else if (index == 2) {
       await getAllFromFavorites();
     }
     choice = index;
+    if (scrollController.hasClients) {
+      scrollToTop();
+    }
   }
 
   // Métodos sobrescritos
@@ -84,17 +97,21 @@ class HomeController extends GetxController with LoaderMixin {
     List<Word>? wordsFromCache;
     isLoading.toggle();
 
-    wordsFromCache = await _wordsRepository.getWordsFromCache();
-
+    wordsFromCache = await _wordsRepository.getWordsFromCache(filterOption);
+    print(wordsFromCache);
+    print(wordsFromCache.length);
     if (wordsFromCache.isEmpty) {
       final response = await _wordsRepository.getAllWordsFromNetwork();
       if (response != null) {
         await _wordsRepository.saveWordsToCache(response);
-        wordsFromCache = await _wordsRepository.getWordsFromCache();
+        wordsFromCache = await _wordsRepository.getWordsFromCache(filterOption);
       }
     }
     count += wordsFromCache.length;
-    wordsList.addAll(wordsFromCache);
+    wordsList.assignAll(wordsFromCache);
+    /* filterOption != ''
+        ? wordsList.assignAll(wordsFromCache)
+        : wordsList.addAll(wordsFromCache); */
     isLoading.toggle();
   }
 
@@ -166,7 +183,7 @@ class HomeController extends GetxController with LoaderMixin {
     if (isLoading.isFalse) {
       isLoading.toggle();
       final wordsQuery =
-          await _wordsRepository.getWordsFromCache(offset: count);
+          await _wordsRepository.getWordsFromCache(filterOption, offset: count);
       isLoading.toggle();
       count += wordsQuery.length;
       wordsList.addAll(wordsQuery);

@@ -1,3 +1,4 @@
+import 'package:dictionary/app/modules/home/widgets/filter_option.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -9,7 +10,123 @@ import 'home_controller.dart';
 import 'widgets/custom_choice_chip.dart';
 
 class HomeView extends GetView<HomeController> {
-  const HomeView({super.key});
+  HomeView({super.key});
+
+  final listOptions = <Map<String, dynamic>>[
+    {
+      'label': 'All',
+      'value': '',
+    },
+    {
+      'label': 'A',
+      'value': 'a',
+    },
+    {
+      'label': 'B',
+      'value': 'b',
+    },
+    {
+      'label': 'C',
+      'value': 'c',
+    },
+    {
+      'label': 'D',
+      'value': 'd',
+    },
+    {
+      'label': 'E',
+      'value': 'e',
+    },
+    {
+      'label': 'F',
+      'value': 'f',
+    },
+    {
+      'label': 'G',
+      'value': 'g',
+    },
+    {
+      'label': 'H',
+      'value': 'h',
+    },
+    {
+      'label': 'I',
+      'value': 'i',
+    },
+    {
+      'label': 'J',
+      'value': 'j',
+    },
+    {
+      'label': 'K',
+      'value': 'k',
+    },
+    {
+      'label': 'L',
+      'value': 'l',
+    },
+    {
+      'label': 'M',
+      'value': 'm',
+    },
+    {
+      'label': 'N',
+      'value': 'n',
+    },
+    {
+      'label': 'O',
+      'value': 'o',
+    },
+    {
+      'label': 'P',
+      'value': 'p',
+    },
+    {
+      'label': 'Q',
+      'value': 'q',
+    },
+    {
+      'label': 'R',
+      'value': 'r',
+    },
+    {
+      'label': 'S',
+      'value': 's',
+    },
+    {
+      'label': 'T',
+      'value': 't',
+    },
+    {
+      'label': 'U',
+      'value': 'u',
+    },
+    {
+      'label': 'V',
+      'value': 'v',
+    },
+    {
+      'label': 'W',
+      'value': 'w',
+    },
+    {
+      'label': 'X',
+      'value': 'x',
+    },
+    {
+      'label': 'Y',
+      'value': 'y',
+    },
+    {
+      'label': 'Z',
+      'value': 'z',
+    },
+    {
+      'label': '#',
+      'value': null,
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
     controller.scrollController.addListener(
@@ -21,7 +138,8 @@ class HomeView extends GetView<HomeController> {
             controller.scrollController.position.viewportDimension + 1;
 
         if (controller.scrollController.position.pixels > nextPageTrigger &&
-            controller.choice == 0) {
+            controller.choice == 0 &&
+            controller.filterOption == '') {
           controller.fetchMoreData();
         }
 
@@ -76,6 +194,37 @@ class HomeView extends GetView<HomeController> {
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: OptionsRow(),
           ),
+          const SizedBox(
+            height: 8,
+          ),
+          SizedBox(
+            height: 50,
+            child: ListView(
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              scrollDirection: Axis.horizontal,
+              children: List.generate(
+                listOptions.length,
+                (index) => FilterOption(
+                  controller: controller,
+                  label: listOptions[index]['label'],
+                  value: listOptions[index]['value'],
+                ),
+              ),
+            ),
+          ),
+          Obx(() => controller.choice == 0
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: Get.width,
+                    child: Text(
+                      '${controller.count} words loaded, scroll and see more',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                )
+              : const SizedBox.shrink()),
           const SizedBox(
             height: 8,
           ),

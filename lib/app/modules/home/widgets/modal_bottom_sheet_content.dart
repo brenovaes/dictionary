@@ -27,7 +27,8 @@ class ModalBottomSheetContent extends StatefulWidget {
 
 class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
   late final AudioPlayer? player;
-  late final Duration? duration;
+  Duration? duration;
+
   final HomeController controller = Get.find<HomeController>();
 
   @override
@@ -58,7 +59,6 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
         8,
       ),
       height: Get.height * 0.80,
-      color: Colors.white,
       child: Column(
         children: [
           Row(
@@ -104,9 +104,17 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
                   height: 200,
                   width: Get.width,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: ConstantsUi.kPrimaryColor,
-                  ),
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset:
+                              const Offset(0, 3), // changes position of shadow
+                        ),
+                      ]),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -115,7 +123,7 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
                         widget.item.word,
                         style: const TextStyle(
                           fontSize: 22,
-                          color: Colors.white,
+                          color: ConstantsUi.kPrimaryColor,
                         ),
                       ),
                       const SizedBox(
@@ -126,7 +134,7 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
                               widget.item.phonetic.toString(),
                               style: const TextStyle(
                                 fontSize: 22,
-                                color: Colors.white,
+                                color: ConstantsUi.kPrimaryColor,
                               ),
                             )
                           : const SizedBox.shrink(),

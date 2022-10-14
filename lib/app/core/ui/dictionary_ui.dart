@@ -47,73 +47,79 @@ class DictionaryUi {
       backgroundColor: ConstantsUi.kPrimaryColor,
       foregroundColor: Colors.white,
     ),
-    bottomSheetTheme: BottomSheetThemeData(
-      shape: const RoundedRectangleBorder(
+    bottomSheetTheme: const BottomSheetThemeData(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(10),
           topRight: Radius.circular(10),
         ),
       ),
-      backgroundColor: Colors.black.withOpacity(0),
     ),
   );
 
   static final ThemeData darkTheme = ThemeData(
-      primarySwatch: Palette.palette,
-      primaryColor: ConstantsUi.kPrimaryColor,
-      primaryColorDark: ConstantsUi.kPrimaryColorDark,
-      fontFamily: 'MPLUSRounded1c',
-      textTheme: const TextTheme().apply(
-        bodyColor: Colors.white,
+    primarySwatch: Palette.palette,
+    primaryColor: ConstantsUi.kPrimaryColor,
+    primaryColorDark: ConstantsUi.kPrimaryColorDark,
+    fontFamily: 'MPLUSRounded1c',
+    textTheme: const TextTheme().apply(
+      bodyColor: Colors.white,
+    ),
+    brightness: Brightness.dark,
+    appBarTheme: const AppBarTheme(
+      color: ConstantsUi.kPrimaryColorDark,
+      elevation: 0,
+      titleTextStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 24,
       ),
-      brightness: Brightness.dark,
-      appBarTheme: const AppBarTheme(
-        color: ConstantsUi.kPrimaryColorDark,
-        elevation: 0,
-        titleTextStyle: TextStyle(
+    ),
+    scaffoldBackgroundColor: ConstantsUi.kPrimaryColorDark,
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: ConstantsUi.kPrimaryColor,
+        textStyle: const TextStyle(
           color: Colors.white,
-          fontSize: 24,
+          fontWeight: FontWeight.bold,
         ),
-      ),
-      scaffoldBackgroundColor: ConstantsUi.kPrimaryColorDark,
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: ConstantsUi.kPrimaryColor,
-          textStyle: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-          elevation: 0,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(
-                12,
-              ),
+        elevation: 0,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(
+              12,
             ),
           ),
         ),
       ),
-      progressIndicatorTheme: const ProgressIndicatorThemeData(
-        color: ConstantsUi.kPrimaryColor,
-      ),
-      floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: ConstantsUi.kPrimaryColor,
-        foregroundColor: Colors.white,
-      ),
-      bottomSheetTheme: BottomSheetThemeData(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(10),
-            topRight: Radius.circular(10),
-          ),
+    ),
+    progressIndicatorTheme: const ProgressIndicatorThemeData(
+      color: ConstantsUi.kPrimaryColor,
+    ),
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: ConstantsUi.kPrimaryColor,
+      foregroundColor: Colors.white,
+    ),
+    bottomSheetTheme: const BottomSheetThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10),
         ),
-        backgroundColor: Colors.black.withOpacity(0),
       ),
-      radioTheme: RadioThemeData(
-        fillColor: MaterialStateProperty.resolveWith<Color>(
-          (_) => ConstantsUi.kPrimaryColor,
+    ),
+    radioTheme: RadioThemeData(
+      fillColor: MaterialStateProperty.resolveWith<Color>(
+        (_) => ConstantsUi.kPrimaryColor,
+      ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.resolveWith<Color>(
+          (_) => ConstantsUi.kPrimaryColorWhite,
         ),
-      ));
+      ),
+    ),
+  );
 
   static const TextStyle textBold = TextStyle(fontWeight: FontWeight.bold);
 }

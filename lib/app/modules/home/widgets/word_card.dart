@@ -22,6 +22,9 @@ class WordCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(8),
+      ),
       child: Ink(
         decoration: const BoxDecoration(
           color: ConstantsUi.kPrimaryColor,
@@ -85,6 +88,7 @@ class WordCard extends StatelessWidget {
   Future<void> _showModal(
       BuildContext context, DictionaryWord item, bool isFavorited) async {
     return await showModalBottomSheet<void>(
+      backgroundColor: const Scaffold().backgroundColor,
       context: context,
       builder: (BuildContext context) {
         return ModalBottomSheetContent(
