@@ -1,127 +1,17 @@
+import 'package:dictionary/app/core/utils/utils.dart';
 import 'package:dictionary/app/modules/home/widgets/filter_option.dart';
+import 'package:dictionary/app/modules/home/widgets/options_row.dart';
+import 'package:dictionary/app/modules/home/widgets/words_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import 'package:dictionary/app/core/ui/constants_ui.dart';
-import 'package:dictionary/app/modules/home/widgets/word_card.dart';
 
 import 'home_controller.dart';
-import 'widgets/custom_choice_chip.dart';
 
 class HomeView extends GetView<HomeController> {
-  HomeView({super.key});
-
-  final listOptions = <Map<String, dynamic>>[
-    {
-      'label': 'All',
-      'value': '',
-    },
-    {
-      'label': 'A',
-      'value': 'a',
-    },
-    {
-      'label': 'B',
-      'value': 'b',
-    },
-    {
-      'label': 'C',
-      'value': 'c',
-    },
-    {
-      'label': 'D',
-      'value': 'd',
-    },
-    {
-      'label': 'E',
-      'value': 'e',
-    },
-    {
-      'label': 'F',
-      'value': 'f',
-    },
-    {
-      'label': 'G',
-      'value': 'g',
-    },
-    {
-      'label': 'H',
-      'value': 'h',
-    },
-    {
-      'label': 'I',
-      'value': 'i',
-    },
-    {
-      'label': 'J',
-      'value': 'j',
-    },
-    {
-      'label': 'K',
-      'value': 'k',
-    },
-    {
-      'label': 'L',
-      'value': 'l',
-    },
-    {
-      'label': 'M',
-      'value': 'm',
-    },
-    {
-      'label': 'N',
-      'value': 'n',
-    },
-    {
-      'label': 'O',
-      'value': 'o',
-    },
-    {
-      'label': 'P',
-      'value': 'p',
-    },
-    {
-      'label': 'Q',
-      'value': 'q',
-    },
-    {
-      'label': 'R',
-      'value': 'r',
-    },
-    {
-      'label': 'S',
-      'value': 's',
-    },
-    {
-      'label': 'T',
-      'value': 't',
-    },
-    {
-      'label': 'U',
-      'value': 'u',
-    },
-    {
-      'label': 'V',
-      'value': 'v',
-    },
-    {
-      'label': 'W',
-      'value': 'w',
-    },
-    {
-      'label': 'X',
-      'value': 'x',
-    },
-    {
-      'label': 'Y',
-      'value': 'y',
-    },
-    {
-      'label': 'Z',
-      'value': 'z',
-    },
-  ];
+  const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -202,11 +92,11 @@ class HomeView extends GetView<HomeController> {
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       scrollDirection: Axis.horizontal,
                       children: List.generate(
-                        listOptions.length,
+                        Utils.listOptions.length,
                         (index) => FilterOption(
                           controller: controller,
-                          label: listOptions[index]['label'],
-                          value: listOptions[index]['value'],
+                          label: Utils.listOptions[index]['label'],
+                          value: Utils.listOptions[index]['value'],
                         ),
                       ),
                     ),
@@ -341,63 +231,6 @@ class HomeView extends GetView<HomeController> {
         ),
       ),
       barrierDismissible: false,
-    );
-  }
-}
-
-class WordsList extends StatelessWidget {
-  final HomeController controller;
-  final List<dynamic> list;
-
-  const WordsList({
-    super.key,
-    required this.controller,
-    required this.list,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.count(
-      controller: controller.scrollController,
-      crossAxisCount: 3,
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.all(8),
-      crossAxisSpacing: 8,
-      mainAxisSpacing: 8,
-      children: list
-          .map(
-            (item) => WordCard(item: item),
-          )
-          .toList(),
-    );
-  }
-}
-
-class OptionsRow extends StatelessWidget {
-  OptionsRow({
-    super.key,
-  });
-
-  final HomeController controller = Get.find();
-
-  final List<String> chipsLabels = [
-    'Words list',
-    'History',
-    'Favorites',
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: List.generate(
-        chipsLabels.length,
-        (index) => CustomChoiceChip(
-          controller: controller,
-          chipsLabels: chipsLabels,
-          index: index,
-        ),
-      ),
     );
   }
 }

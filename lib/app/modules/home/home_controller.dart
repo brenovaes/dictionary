@@ -98,8 +98,6 @@ class HomeController extends GetxController with LoaderMixin {
     isLoading.toggle();
 
     wordsFromCache = await _wordsRepository.getWordsFromCache(filterOption);
-    print(wordsFromCache);
-    print(wordsFromCache.length);
     if (wordsFromCache.isEmpty) {
       final response = await _wordsRepository.getAllWordsFromNetwork();
       if (response != null) {
@@ -109,9 +107,6 @@ class HomeController extends GetxController with LoaderMixin {
     }
     count += wordsFromCache.length;
     wordsList.assignAll(wordsFromCache);
-    /* filterOption != ''
-        ? wordsList.assignAll(wordsFromCache)
-        : wordsList.addAll(wordsFromCache); */
     isLoading.toggle();
   }
 
