@@ -26,7 +26,7 @@ class HomeController extends GetxController with LoaderMixin {
   late final ScrollController scrollController;
 
   // Variáveis observáveis com getters e/ou setters
-  final _filterOption = RxnString('');
+  final _filterOption = ''.obs;
   String? get filterOption => _filterOption.value;
   set filterOption(value) {
     count = 0;

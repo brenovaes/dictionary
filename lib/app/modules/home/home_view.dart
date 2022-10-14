@@ -121,10 +121,6 @@ class HomeView extends GetView<HomeController> {
       'label': 'Z',
       'value': 'z',
     },
-    {
-      'label': '#',
-      'value': null,
-    },
   ];
 
   @override
@@ -197,34 +193,40 @@ class HomeView extends GetView<HomeController> {
           const SizedBox(
             height: 8,
           ),
-          SizedBox(
-            height: 50,
-            child: ListView(
-              physics: const BouncingScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              scrollDirection: Axis.horizontal,
-              children: List.generate(
-                listOptions.length,
-                (index) => FilterOption(
-                  controller: controller,
-                  label: listOptions[index]['label'],
-                  value: listOptions[index]['value'],
-                ),
-              ),
-            ),
-          ),
-          Obx(() => controller.choice == 0
-              ? Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: Get.width,
-                    child: Text(
-                      '${controller.count} words loaded, scroll and see more',
-                      textAlign: TextAlign.center,
+          Obx(
+            () => controller.choice == 0
+                ? SizedBox(
+                    height: 50,
+                    child: ListView(
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      scrollDirection: Axis.horizontal,
+                      children: List.generate(
+                        listOptions.length,
+                        (index) => FilterOption(
+                          controller: controller,
+                          label: listOptions[index]['label'],
+                          value: listOptions[index]['value'],
+                        ),
+                      ),
                     ),
-                  ),
-                )
-              : const SizedBox.shrink()),
+                  )
+                : const SizedBox.shrink(),
+          ),
+          Obx(
+            () => controller.choice == 0 && controller.filterOption == ''
+                ? Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: Get.width,
+                      child: Text(
+                        '${controller.count} words loaded, scroll and see more',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  )
+                : const SizedBox.shrink(),
+          ),
           const SizedBox(
             height: 8,
           ),

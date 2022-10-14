@@ -23,15 +23,12 @@ class WordsRepositoryImpl implements WordsRepository {
     List<Word> resultList;
     print(filter);
     switch (filter) {
-      /* case null:
-        break; */
       case '':
         resultList = _wordsBox
             .valuesBetween(startKey: offset, endKey: offset + 29)
             .toList();
         break;
       default:
-        print('entrei no default');
         resultList = _wordsBox
             .toMap()
             .values
