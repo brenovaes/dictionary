@@ -11,14 +11,16 @@ Este é um aplicativo desenvolvido para ajudá-lo a ter acesso rápido a palavra
 
 - [Flutter][flutter] - Desenvolvimento mobile multiplataforma
 - [GetX][get] - Gerenciamento de estados, gerenciamento de rotas e injeção de dependências
-- [Hive][hive] - Gestão/armazenamento de dados
 - [GetConnect][get] - Cliente HTTP
+- [GetStorage][get_storage] - Gestão/armazenamento de dados
+- [Hive][hive] - Gestão/armazenamento de dados
 - [JustAudio][just_audio] - Player de áudio
 - [Phosphor Icons][phosphor] - Pacote de ícones
 
 
 [flutter]: https://flutter.dev
 [get]: https://pub.dev/packages/get
+[get_storage]: https://pub.dev/packages/get_storage
 [hive]: https://pub.dev/packages/hive
 [just_audio]: https://pub.dev/packages/just_audio
 [phosphor]: https://phosphoricons.com/
