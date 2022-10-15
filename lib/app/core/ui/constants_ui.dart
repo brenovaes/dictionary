@@ -5,5 +5,6 @@ class ConstantsUi {
 
   static const kPrimaryColor = Color(0xFF292961);
   static const kPrimaryColorDark = Color(0xFF212121);
+  static const kPrimaryColorDarkAccent = Color(0xFF484848);
   static const kPrimaryColorWhite = Colors.white;
 }

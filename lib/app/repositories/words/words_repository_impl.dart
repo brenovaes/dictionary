@@ -21,7 +21,7 @@ class WordsRepositoryImpl implements WordsRepository {
   @override
   Future<List<Word>> getWordsFromCache(String? filter, {int offset = 0}) async {
     List<Word> resultList;
-    print(filter);
+
     switch (filter) {
       case '':
         resultList = _wordsBox

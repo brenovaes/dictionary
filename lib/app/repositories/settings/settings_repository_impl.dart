@@ -17,6 +17,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
       'theme': settingsContainer.read('theme') ?? 'system',
       'language':
           settingsContainer.read('language') ?? Utils.getLocaleFromPlatform(),
+      'jwt': settingsContainer.read('jwt'),
     });
     return settings;
   }

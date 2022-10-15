@@ -15,12 +15,16 @@ class DictionaryUi {
     ),
     brightness: Brightness.light,
     appBarTheme: const AppBarTheme(
+      iconTheme: IconThemeData(color: ConstantsUi.kPrimaryColorDark),
       color: Colors.white,
       elevation: 0,
       titleTextStyle: TextStyle(
         color: ConstantsUi.kPrimaryColorDark,
         fontSize: 24,
       ),
+    ),
+    inputDecorationTheme: const InputDecorationTheme(
+      border: OutlineInputBorder(),
     ),
     scaffoldBackgroundColor: Colors.white,
     elevatedButtonTheme: ElevatedButtonThemeData(
@@ -34,7 +38,7 @@ class DictionaryUi {
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(
-              12,
+              8,
             ),
           ),
         ),
@@ -74,6 +78,18 @@ class DictionaryUi {
         fontSize: 24,
       ),
     ),
+    inputDecorationTheme: const InputDecorationTheme(
+      suffixIconColor: ConstantsUi.kPrimaryColorWhite,
+      labelStyle: TextStyle(color: ConstantsUi.kPrimaryColorWhite),
+      border: OutlineInputBorder(
+          /* borderRadius: BorderRadius.circular(8), */
+          ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: ConstantsUi.kPrimaryColorWhite,
+        ),
+      ),
+    ),
     scaffoldBackgroundColor: ConstantsUi.kPrimaryColorDark,
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -86,7 +102,7 @@ class DictionaryUi {
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(
-              12,
+              8,
             ),
           ),
         ),

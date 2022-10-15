@@ -48,9 +48,9 @@ Future<void> _initHive() async {
 
 _initGetStorage() async {
   await GetStorage.init('settingsContainer');
-  Get.lazyPut<SettingsRepository>(
-    () => SettingsRepositoryImpl(),
-    fenix: true,
+  Get.put<SettingsRepository>(
+    SettingsRepositoryImpl(),
+    permanent: true,
   );
 }
 
@@ -61,7 +61,7 @@ Future<ThemeMode> _readTheme() async {
 
   var theme = storage.read('theme');
 
-  if (theme == 'light') {
+  if (theme == 'light' || theme == null) {
     returnTheme = ThemeMode.light;
   }
 

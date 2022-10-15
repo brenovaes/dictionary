@@ -73,8 +73,9 @@ class HomeController extends GetxController with LoaderMixin {
 
   // Métodos sobrescritos
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
+    /* await _initHive(); */
     loaderListener(isLoading);
     scrollController = ScrollController();
   }
@@ -194,4 +195,8 @@ class HomeController extends GetxController with LoaderMixin {
   void setPreference(String key, value) {
     _settingsRepository.saveSetting(key, value);
   }
+
+  /* Future<void> _initHive() async {
+    await Get.putAsync(() => HiveInitController().init());
+  } */
 }
