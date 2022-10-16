@@ -3,8 +3,10 @@ import 'package:dictionary/app/models/dictionary_word_model.dart';
 import 'package:dictionary/app/models/word_model.dart';
 import 'package:dictionary/app/repositories/settings/settings_repository.dart';
 import 'package:dictionary/app/repositories/words/words_repository.dart';
+import 'package:dictionary/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class HomeController extends GetxController with LoaderMixin {
   final WordsRepository _wordsRepository;
@@ -75,7 +77,6 @@ class HomeController extends GetxController with LoaderMixin {
   @override
   void onInit() async {
     super.onInit();
-    /* await _initHive(); */
     loaderListener(isLoading);
     scrollController = ScrollController();
   }
@@ -196,7 +197,12 @@ class HomeController extends GetxController with LoaderMixin {
     _settingsRepository.saveSetting(key, value);
   }
 
-  /* Future<void> _initHive() async {
-    await Get.putAsync(() => HiveInitController().init());
-  } */
+  void logout() async {
+    _settingsRepository.deleteJwt();
+    final favoritesBox = Hive.box<DictionaryWord>('favorites');
+    final historyBox = Hive.box<DictionaryWord>('history');
+    await favoritesBox.clear();
+    await historyBox.clear();
+    Get.offAllNamed(Routes.LOGIN);
+  }
 }

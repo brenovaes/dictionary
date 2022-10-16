@@ -54,7 +54,6 @@ class LoginController extends GetxController with LoaderMixin {
 
     if (result!.statusCode == 200) {
       _settingsRepository.saveSetting('jwt', result.body['token']);
-      //_authRepository.setIsLogged(true);
       Get.offAllNamed(Routes.HOME);
     } else if (result.statusCode == 401) {
       credentialError.value = true;

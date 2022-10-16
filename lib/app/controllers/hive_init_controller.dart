@@ -6,8 +6,8 @@ import 'package:dictionary/app/models/word_model.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-class HiveInitController extends GetxService {
-  Future<HiveInitController> init() async {
+class HiveInitController {
+  static Future<void> init() async {
     await Hive.initFlutter();
 
     Hive.registerAdapter(WordAdapter());
@@ -36,7 +36,5 @@ class HiveInitController extends GetxService {
       permanent: true,
       tag: 'history',
     );
-
-    return this;
   }
 }

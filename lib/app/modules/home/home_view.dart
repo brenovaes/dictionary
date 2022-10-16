@@ -53,6 +53,9 @@ class HomeView extends GetView<HomeController> {
                 case 'language':
                   //_buildLanguageDialog();
                   break;
+                case 'logout':
+                  _buildLogoutDialog();
+                  break;
               }
             },
             itemBuilder: (BuildContext context) => [
@@ -68,6 +71,13 @@ class HomeView extends GetView<HomeController> {
                 child: ListTile(
                   leading: Icon(PhosphorIcons.translate),
                   title: Text('Change language'),
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'logout',
+                child: ListTile(
+                  leading: Icon(PhosphorIcons.signOut),
+                  title: Text('Logout'),
                 ),
               ),
             ],
@@ -231,6 +241,25 @@ class HomeView extends GetView<HomeController> {
         ),
       ),
       barrierDismissible: false,
+    );
+  }
+
+  Future<dynamic> _buildLogoutDialog() async {
+    return Get.dialog(
+      AlertDialog(
+        title: const Text('Logout'),
+        content: const Text('Are you sure you want to logout?'),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => controller.logout(),
+            child: const Text('Logout'),
+          ),
+        ],
+      ),
     );
   }
 }

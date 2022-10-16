@@ -11,6 +11,11 @@ class SettingsRepositoryImpl implements SettingsRepository {
   }
 
   @override
+  void deleteJwt() {
+    settingsContainer.remove('jwt');
+  }
+
+  @override
   Map<String, dynamic> getSettings() {
     var settings = <String, dynamic>{};
     settings.addAll({
