@@ -53,7 +53,6 @@ class LoginController extends GetxController with LoaderMixin {
     isLoading.toggle();
 
     if (result!.statusCode == 200) {
-      print(result.body['token']);
       _settingsRepository.saveSetting('jwt', result.body['token']);
       Get.offAllNamed(Routes.HOME, arguments: true);
     } else if (result.statusCode == 401) {

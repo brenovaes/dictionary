@@ -96,7 +96,7 @@ class WordsRepositoryImpl implements WordsRepository {
       DictionaryWord item, String type, String jwt) async {
     try {
       final result = await _restClient.put(
-        'http://192.168.0.8:3333/words/$type',
+        'https://dictionary-coodesh.herokuapp.com/words/$type',
         item.toMap(),
         headers: {
           'Content-Type': 'application/json',
@@ -124,7 +124,7 @@ class WordsRepositoryImpl implements WordsRepository {
       DictionaryWord item, String type, String jwt) async {
     try {
       final result = await _restClient.delete(
-        'http://192.168.0.8:3333/words/$type/${item.word}',
+        'https://dictionary-coodesh.herokuapp.com/words/$type/${item.word}',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $jwt',
@@ -198,14 +198,13 @@ class WordsRepositoryImpl implements WordsRepository {
   Future<ResponseModel?> restoreWordsFromRemoteDatabase(String jwt) async {
     try {
       final result = await _restClient.get(
-        'http://192.168.0.8:3333/words',
+        'https://dictionary-coodesh.herokuapp.com/words',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $jwt',
         },
       );
-      print(result.body);
-      print(result.statusCode);
+
       final response = ResponseModel(
         statusCode: result.statusCode!.toInt(),
         message: result.statusText.toString(),

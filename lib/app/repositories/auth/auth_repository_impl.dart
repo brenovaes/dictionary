@@ -13,7 +13,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<ResponseModel?> attemptSignup(User user) async {
     try {
       final result = await _restClient.put(
-        'http://192.168.0.8:3333/auth/signup',
+        'https://dictionary-coodesh.herokuapp.com/auth/signup',
         user.toJson(),
       );
 
@@ -32,7 +32,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<ResponseModel?> attemptSignin(User user) async {
     try {
       final result = await _restClient.post(
-        'http://192.168.0.8:3333/auth/signin',
+        'https://dictionary-coodesh.herokuapp.com/auth/signin',
         user.toJson(),
       );
 
@@ -43,6 +43,7 @@ class AuthRepositoryImpl implements AuthRepository {
       response.body = result.body;
       return response;
     } catch (e) {
+      print(e);
       return null;
     }
   }

@@ -1,12 +1,13 @@
 import 'package:get/get.dart';
 
 class RestClient extends GetConnect {
-  /* final _backendBaseUrl = 'https://gateway.marvel.com/v1/public';
+  //final _backendBaseUrl = 'https://gateway.marvel.com/v1/public';
 
   RestClient() {
-    httpClient.baseUrl = _backendBaseUrl;
-    httpClient.defaultContentType = "application/json";
-  } */
+    httpClient.timeout = const Duration(seconds: 60);
+    /* httpClient.baseUrl = _backendBaseUrl;
+    httpClient.defaultContentType = "application/json"; */
+  }
 }
 
 class RestClientException implements Exception {
