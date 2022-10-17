@@ -92,6 +92,61 @@ class WordsRepositoryImpl implements WordsRepository {
   }
 
   @override
+  Future<ResponseModel?> saveWordToRemoteDatabase(
+      DictionaryWord item, String type, String jwt) async {
+    try {
+      final result = await _restClient.put(
+        'http://192.168.0.8:3333/words/$type',
+        item.toMap(),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $jwt',
+        },
+      );
+
+      final response = ResponseModel(
+        statusCode: result.statusCode!.toInt(),
+        message: result.statusText.toString(),
+      );
+      if (result.statusCode == 201) {
+        response.body = true;
+      } else {
+        response.body = false;
+      }
+      return response;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @override
+  Future<ResponseModel?> removeWordFromRemoteDatabase(
+      DictionaryWord item, String type, String jwt) async {
+    try {
+      final result = await _restClient.delete(
+        'http://192.168.0.8:3333/words/$type/${item.word}',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $jwt',
+        },
+      );
+
+      final response = ResponseModel(
+        statusCode: result.statusCode!.toInt(),
+        message: result.statusText.toString(),
+      );
+      if (result.statusCode == 201) {
+        response.body = true;
+      } else {
+        response.body = false;
+      }
+      return response;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /* @override
   Future<bool> saveDictionaryWordToCache(DictionaryWord item) async {
     try {
       await _historyBox.add(item);
@@ -99,7 +154,7 @@ class WordsRepositoryImpl implements WordsRepository {
     } catch (e) {
       return false;
     }
-  }
+  } */
 
   @override
   Future<List<DictionaryWord>> findWord(String wordToSearch, String box) async {
@@ -112,15 +167,20 @@ class WordsRepositoryImpl implements WordsRepository {
   }
 
   @override
-  Future<void> saveNewItemToHistory(DictionaryWord item) async =>
-      await _historyBox.add(item);
+  Future<void> saveNewItemToHistory(DictionaryWord item, String? jwt) async {
+    print('entrei saveNewItemToHistory repository');
+    await _historyBox.add(item);
+    if (jwt != null) {
+      await saveWordToRemoteDatabase(item, 'history', jwt);
+    }
+  }
 
   @override
   Future<List<DictionaryWord>> getAllFromHistory() async =>
       _historyBox.toMap().values.toList();
 
   @override
-  Future<void> saveNewFavorite(DictionaryWord item) async {
+  Future<void> saveNewFavorite(DictionaryWord item, String? jwt) async {
     /* O Hive não permite salvar o mesmo objeto em mais de uma box; criando um novo objeto baseado no anterior.*/
     var newWord = DictionaryWord(
       word: item.word,
@@ -130,13 +190,70 @@ class WordsRepositoryImpl implements WordsRepository {
       sourceUrls: item.sourceUrls,
     );
     await _favoritesBox.add(newWord);
+    if (jwt != null) {
+      await saveWordToRemoteDatabase(item, 'favorites', jwt);
+    }
   }
 
   @override
-  Future<void> removeFromFavorites(DictionaryWord item) async =>
-      await item.delete();
+  Future<void> removeFromFavorites(DictionaryWord item, String jwt) async {
+    await item.delete();
+    await removeWordFromRemoteDatabase(item, 'favorites', jwt);
+  }
 
   @override
   Future<List<DictionaryWord>> getAllFromFavorites() async =>
       _favoritesBox.toMap().values.toList();
+
+  @override
+  Future<ResponseModel?> restoreWordsFromRemoteDatabase(String jwt) async {
+    try {
+      final result = await _restClient.get(
+        'http://192.168.0.8:3333/words',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $jwt',
+        },
+      );
+
+      final response = ResponseModel(
+        statusCode: result.statusCode!.toInt(),
+        message: result.statusText.toString(),
+      );
+      if (result.statusCode == 200) {
+        final list = <DictionaryWord>[];
+        for (var element in result.body['words']) {
+          var newElement = DictionaryWord.fromMap(element);
+          newElement.needsLoad = true;
+          list.add(newElement);
+        }
+        response.body = list;
+        /* DictionaryWord(
+          word: 'teste',
+          phonetic: null,
+          phonetics: [],
+          meanings: [],
+          sourceUrls: []
+        ); */
+      } else {
+        response.body = false;
+      }
+      return response;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  @override
+  Future<void> saveRestoredWordsToCache(List<DictionaryWord> list) async {
+    print('entrei');
+    for (var element in list) {
+      if (element.table == 'history') {
+        await saveNewItemToHistory(element, null);
+      } else {
+        await saveNewFavorite(element, null);
+      }
+    }
+  }
 }

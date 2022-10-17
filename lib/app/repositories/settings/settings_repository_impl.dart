@@ -26,4 +26,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
     });
     return settings;
   }
+
+  @override
+  String getJwt() => settingsContainer.read('jwt');
 }

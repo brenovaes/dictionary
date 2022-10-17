@@ -1,9 +1,31 @@
+import 'dart:convert';
 import 'dart:io';
+
+import 'package:dictionary/app/models/payload.dart';
 
 class Utils {
   Utils._();
 
   static String getLocaleFromPlatform() => Platform.localeName.toString();
+
+  static Payload readJwtPayload(String jwt) {
+    var explodedJwt = jwt.split(".");
+    var payload = jsonDecode(
+      utf8.decode(
+        base64.decode(
+          base64.normalize(
+            explodedJwt[1],
+          ),
+        ),
+      ),
+    );
+    return Payload(
+      id: payload['id'],
+      username: payload['username'],
+      iat: payload['iat'],
+      exp: payload['exp'],
+    );
+  }
 
   static final listOptions = <Map<String, dynamic>>[
     {

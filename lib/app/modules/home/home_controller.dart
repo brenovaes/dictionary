@@ -79,6 +79,9 @@ class HomeController extends GetxController with LoaderMixin {
     super.onInit();
     loaderListener(isLoading);
     scrollController = ScrollController();
+    if (Get.arguments == true) {
+      await restoreWordsFromRemoteDatabase();
+    }
   }
 
   @override
@@ -163,18 +166,23 @@ class HomeController extends GetxController with LoaderMixin {
   Future<void> saveNewItemToHistory(DictionaryWord item) async {
     final isViewed = await findWord(item.word, 'history');
     if (isViewed.isEmpty) {
-      await _wordsRepository.saveNewItemToHistory(item);
+      final jwt = _settingsRepository.getJwt();
+      await _wordsRepository.saveNewItemToHistory(item, jwt);
     }
   }
 
   Future<List<DictionaryWord>> findWord(String word, String box) async =>
       await _wordsRepository.findWord(word, box);
 
-  Future<void> removeFromFavorites(DictionaryWord item) async =>
-      await _wordsRepository.removeFromFavorites(item);
+  Future<void> removeFromFavorites(DictionaryWord item) async {
+    final jwt = _settingsRepository.getJwt();
+    await _wordsRepository.removeFromFavorites(item, jwt);
+  }
 
-  Future<void> saveNewFavorite(DictionaryWord item) async =>
-      await _wordsRepository.saveNewFavorite(item);
+  Future<void> saveNewFavorite(DictionaryWord item) async {
+    final jwt = _settingsRepository.getJwt();
+    await _wordsRepository.saveNewFavorite(item, jwt);
+  }
 
   Future<void> fetchMoreData() async {
     if (isLoading.isFalse) {
@@ -204,5 +212,16 @@ class HomeController extends GetxController with LoaderMixin {
     await favoritesBox.clear();
     await historyBox.clear();
     Get.offAllNamed(Routes.LOGIN);
+  }
+
+  Future<void> restoreWordsFromRemoteDatabase() async {
+    final jwt = _settingsRepository.getJwt();
+    final response = await _wordsRepository.restoreWordsFromRemoteDatabase(jwt);
+
+    if (response!.statusCode == 200) {
+      if (response.body.length > 0) {
+        await _wordsRepository.saveRestoredWordsToCache(response.body);
+      }
+    }
   }
 }

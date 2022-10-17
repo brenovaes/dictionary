@@ -18,6 +18,10 @@ class DictionaryWord extends HiveObject {
   List<Meaning> meanings;
   @HiveField(4)
   List<String> sourceUrls;
+  @HiveField(5)
+  bool needsLoad;
+  @HiveField(6)
+  String? table;
 
   DictionaryWord({
     required this.word,
@@ -25,6 +29,8 @@ class DictionaryWord extends HiveObject {
     required this.phonetics,
     required this.meanings,
     required this.sourceUrls,
+    this.needsLoad = false,
+    this.table,
   });
 
   Map<String, dynamic> toMap() {
@@ -33,7 +39,7 @@ class DictionaryWord extends HiveObject {
       'phonetic': phonetic,
       'phonetics': phonetics.map((x) => x?.toMap()).toList(),
       'meanings': meanings.map((x) => x.toMap()).toList(),
-      'sourceUrls': sourceUrls,
+      /* 'sourceUrls': sourceUrls, */
     };
   }
 
@@ -41,17 +47,24 @@ class DictionaryWord extends HiveObject {
     return DictionaryWord(
       word: map['word'] as String,
       phonetic: map['phonetic'] != null ? map['phonetic'] as String : null,
-      phonetics: List<Phonetic?>.from(
-        (map['phonetics'] as List).map<Phonetic?>(
-          (x) => Phonetic.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
-      meanings: List<Meaning>.from(
-        (map['meanings'] as List).map<Meaning>(
-          (x) => Meaning.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
-      sourceUrls: List<String>.from((map['sourceUrls'] as List)),
+      phonetics: map['phonetics'] != null
+          ? List<Phonetic?>.from(
+              (map['phonetics'] as List).map<Phonetic?>(
+                (x) => Phonetic.fromMap(x as Map<String, dynamic>),
+              ),
+            )
+          : [],
+      meanings: map['meanings'] != null
+          ? List<Meaning>.from(
+              (map['meanings'] as List).map<Meaning>(
+                (x) => Meaning.fromMap(x as Map<String, dynamic>),
+              ),
+            )
+          : [],
+      sourceUrls: map['sourceUrls'] != null
+          ? List<String>.from((map['sourceUrls'] as List))
+          : [],
+      table: map['table'] != null ? map['table'] as String : null,
     );
   }
 
@@ -62,6 +75,6 @@ class DictionaryWord extends HiveObject {
 
   @override
   String toString() {
-    return 'DictionaryWord(word: $word, phonetic: $phonetic, phonetics: $phonetics, meanings: $meanings, sourceUrls: $sourceUrls)';
+    return 'DictionaryWord(word: $word, phonetic: $phonetic, phonetics: $phonetics, meanings: $meanings, sourceUrls: $sourceUrls, needsLoad: $needsLoad, table: $table)';
   }
 }
