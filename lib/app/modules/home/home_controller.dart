@@ -75,13 +75,10 @@ class HomeController extends GetxController with LoaderMixin {
 
   // Métodos sobrescritos
   @override
-  void onInit() async {
+  void onInit() {
     super.onInit();
     loaderListener(isLoading);
     scrollController = ScrollController();
-    if (Get.arguments == true) {
-      await restoreWordsFromRemoteDatabase();
-    }
   }
 
   @override
@@ -89,6 +86,9 @@ class HomeController extends GetxController with LoaderMixin {
     super.onReady();
     await getWordsFromCache();
     getPreferences();
+    if (Get.arguments == true) {
+      await restoreWordsFromRemoteDatabase();
+    }
   }
 
   @override
@@ -215,13 +215,18 @@ class HomeController extends GetxController with LoaderMixin {
   }
 
   Future<void> restoreWordsFromRemoteDatabase() async {
+    isLoading.toggle();
     final jwt = _settingsRepository.getJwt();
     final response = await _wordsRepository.restoreWordsFromRemoteDatabase(jwt);
 
     if (response!.statusCode == 200) {
       if (response.body.length > 0) {
-        await _wordsRepository.saveRestoredWordsToCache(response.body);
+        final items = (response.body as List)
+            .map((item) => DictionaryWord.fromMap(item))
+            .toList();
+        await _wordsRepository.saveRestoredWordsToCache(items);
       }
     }
+    isLoading.toggle();
   }
 }

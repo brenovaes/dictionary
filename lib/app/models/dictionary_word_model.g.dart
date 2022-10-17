@@ -22,15 +22,14 @@ class DictionaryWordAdapter extends TypeAdapter<DictionaryWord> {
       phonetics: (fields[2] as List).cast<Phonetic?>(),
       meanings: (fields[3] as List).cast<Meaning>(),
       sourceUrls: (fields[4] as List).cast<String>(),
-      needsLoad: fields[5] as bool,
-      table: fields[6] as String?,
+      table: fields[5] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, DictionaryWord obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.word)
       ..writeByte(1)
@@ -42,8 +41,6 @@ class DictionaryWordAdapter extends TypeAdapter<DictionaryWord> {
       ..writeByte(4)
       ..write(obj.sourceUrls)
       ..writeByte(5)
-      ..write(obj.needsLoad)
-      ..writeByte(6)
       ..write(obj.table);
   }
 

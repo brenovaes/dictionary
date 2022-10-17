@@ -19,8 +19,6 @@ class DictionaryWord extends HiveObject {
   @HiveField(4)
   List<String> sourceUrls;
   @HiveField(5)
-  bool needsLoad;
-  @HiveField(6)
   String? table;
 
   DictionaryWord({
@@ -29,7 +27,6 @@ class DictionaryWord extends HiveObject {
     required this.phonetics,
     required this.meanings,
     required this.sourceUrls,
-    this.needsLoad = false,
     this.table,
   });
 
@@ -75,6 +72,6 @@ class DictionaryWord extends HiveObject {
 
   @override
   String toString() {
-    return 'DictionaryWord(word: $word, phonetic: $phonetic, phonetics: $phonetics, meanings: $meanings, sourceUrls: $sourceUrls, needsLoad: $needsLoad, table: $table)';
+    return 'DictionaryWord(word: $word, phonetic: $phonetic, phonetics: $phonetics, meanings: $meanings, sourceUrls: $sourceUrls, table: $table)';
   }
 }

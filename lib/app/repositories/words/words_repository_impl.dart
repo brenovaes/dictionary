@@ -146,16 +146,6 @@ class WordsRepositoryImpl implements WordsRepository {
     }
   }
 
-  /* @override
-  Future<bool> saveDictionaryWordToCache(DictionaryWord item) async {
-    try {
-      await _historyBox.add(item);
-      return true;
-    } catch (e) {
-      return false;
-    }
-  } */
-
   @override
   Future<List<DictionaryWord>> findWord(String wordToSearch, String box) async {
     final useBox = box == 'favorites' ? _favoritesBox : _historyBox;
@@ -168,7 +158,6 @@ class WordsRepositoryImpl implements WordsRepository {
 
   @override
   Future<void> saveNewItemToHistory(DictionaryWord item, String? jwt) async {
-    print('entrei saveNewItemToHistory repository');
     await _historyBox.add(item);
     if (jwt != null) {
       await saveWordToRemoteDatabase(item, 'history', jwt);
@@ -215,26 +204,14 @@ class WordsRepositoryImpl implements WordsRepository {
           'Authorization': 'Bearer $jwt',
         },
       );
-
+      print(result.body);
+      print(result.statusCode);
       final response = ResponseModel(
         statusCode: result.statusCode!.toInt(),
         message: result.statusText.toString(),
       );
       if (result.statusCode == 200) {
-        final list = <DictionaryWord>[];
-        for (var element in result.body['words']) {
-          var newElement = DictionaryWord.fromMap(element);
-          newElement.needsLoad = true;
-          list.add(newElement);
-        }
-        response.body = list;
-        /* DictionaryWord(
-          word: 'teste',
-          phonetic: null,
-          phonetics: [],
-          meanings: [],
-          sourceUrls: []
-        ); */
+        response.body = result.body['returnList'];
       } else {
         response.body = false;
       }
@@ -247,7 +224,6 @@ class WordsRepositoryImpl implements WordsRepository {
 
   @override
   Future<void> saveRestoredWordsToCache(List<DictionaryWord> list) async {
-    print('entrei');
     for (var element in list) {
       if (element.table == 'history') {
         await saveNewItemToHistory(element, null);
