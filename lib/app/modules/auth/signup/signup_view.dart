@@ -15,7 +15,7 @@ class SignupView extends GetView<SignupController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Register'),
+        title: Text('register'.tr),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -30,9 +30,9 @@ class SignupView extends GetView<SignupController> {
                     controller: controller.usernameController,
                     validator: (value) => controller.validateUsername(value),
                     decoration: InputDecoration(
-                      labelText: "Username",
+                      labelText: 'username'.tr,
                       errorText: controller.usernameAlreadyRegistered.value
-                          ? 'Username already registered'
+                          ? 'username_registered'.tr
                           : null,
                     ),
                     inputFormatters: [
@@ -55,7 +55,7 @@ class SignupView extends GetView<SignupController> {
                             ? const Icon(PhosphorIcons.eyeClosed)
                             : const Icon(PhosphorIcons.eye),
                       ),
-                      labelText: "Password",
+                      labelText: 'password'.tr,
                     ),
                   ),
                 ),
@@ -76,8 +76,8 @@ class SignupView extends GetView<SignupController> {
                     child: /* controller.isLoading.value
                           ? const CircularProgressIndicator()
                           : const  */
-                        const Text(
-                      'Finalizar cadastro',
+                        Text(
+                      'create_account'.tr,
                     ),
                   ),
                 ),

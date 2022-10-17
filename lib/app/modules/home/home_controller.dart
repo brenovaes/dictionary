@@ -57,6 +57,10 @@ class HomeController extends GetxController with LoaderMixin {
   String? get theme => _theme.value;
   set theme(value) => _theme.value = value;
 
+  final _language = RxnString();
+  String? get language => _language.value;
+  set language(value) => _language.value = value;
+
   //Métodos de validação
   onChangedAudioProgress(value) => audioProgressValue = value;
 
@@ -198,12 +202,11 @@ class HomeController extends GetxController with LoaderMixin {
   void getPreferences() {
     Map<String, dynamic> preferences = _settingsRepository.getSettings();
     _theme(preferences['theme']);
-    //_language(preferences['language']);
+    _language(preferences['language']);
   }
 
-  void setPreference(String key, value) {
-    _settingsRepository.saveSetting(key, value);
-  }
+  void setPreference(String key, value) =>
+      _settingsRepository.saveSetting(key, value);
 
   void logout() async {
     _settingsRepository.deleteJwt();

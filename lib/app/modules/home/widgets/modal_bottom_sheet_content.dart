@@ -184,9 +184,9 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
                   padding: const EdgeInsets.all(8.0),
                   child: SizedBox(
                     width: Get.width,
-                    child: const Text(
-                      'Meanings',
-                      style: TextStyle(
+                    child: Text(
+                      'meanings'.tr,
+                      style: const TextStyle(
                         fontSize: 22,
                       ),
                     ),

@@ -6,14 +6,10 @@ class SettingsRepositoryImpl implements SettingsRepository {
   final settingsContainer = GetStorage('settingsContainer');
 
   @override
-  void saveSetting(String key, value) {
-    settingsContainer.write(key, value);
-  }
+  void saveSetting(String key, value) => settingsContainer.write(key, value);
 
   @override
-  void deleteJwt() {
-    settingsContainer.remove('jwt');
-  }
+  void deleteJwt() => settingsContainer.remove('jwt');
 
   @override
   Map<String, dynamic> getSettings() {

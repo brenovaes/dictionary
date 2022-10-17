@@ -1,0 +1,66 @@
+import 'package:get/get.dart';
+
+class TranslationKeys extends Translations {
+  @override
+  Map<String, Map<String, String>> get keys => {
+        'en_US': {
+          'username': 'Username',
+          'invalid_credentials': 'Invalid credentials',
+          'password': 'Password',
+          'login': 'Login',
+          'account_created': 'Account created! Use your credentials to login.',
+          'create_account': 'Create account',
+          'register': 'Register',
+          'username_registered': 'Username already registered',
+          'change_theme': 'Change theme',
+          'choose_theme': 'Choose theme:',
+          'change_language': 'Change language',
+          'choose_language': 'Choose language:',
+          'logout': 'Logout',
+          'qty_word_loaded': '@value words loaded, scroll and see more',
+          'no_words': 'No words found.',
+          'light': 'Light',
+          'dark': 'Dark',
+          'match_system': 'Match system\'s theme',
+          'sure': 'Are you sure you want to logout?',
+          'cancel': 'Cancel',
+          'save': 'Save',
+          'meanings': 'Meanings',
+          'words_list': 'Words list',
+          'favorites': 'Favorites',
+          'history': 'History',
+          'no_definition': 'No definition found for this word/phrase.',
+        },
+        'pt_BR': {
+          'username': 'Usuário',
+          'invalid_credentials': 'Credenciais inválidas',
+          'password': 'Senha',
+          'login': 'Login',
+          'account_created':
+              'Conta criada! Use suas credenciais para fazer login.',
+          'create_account': 'Criar conta',
+          'register': 'Registrar',
+          'username_registered': 'Este usuário já está registrado',
+          'change_theme': 'Mudar tema',
+          'choose_theme': 'Escolha um tema:',
+          'change_language': 'Mudar idioma',
+          'choose_language': 'Escolha um idioma:',
+          'logout': 'Sair',
+          'qty_word_loaded':
+              '@value palavras carregadas, role a lista para ver mais',
+          'no_words': 'Nenhuma palavra encontrada.',
+          'light': 'Claro',
+          'dark': 'Escuro',
+          'match_system': 'O mesmo do sistema',
+          'sure': 'Tem certeza que deseja sair?',
+          'cancel': 'Cancelar',
+          'save': 'Salvar',
+          'meanings': 'Significados',
+          'words_list': 'Palavras',
+          'favorites': 'Favoritos',
+          'history': 'Histórico',
+          'no_definition':
+              'Nenhuma definição encontrada para esta palavra/frase.',
+        },
+      };
+}

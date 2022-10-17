@@ -51,7 +51,7 @@ class HomeView extends GetView<HomeController> {
                   _buildThemeDialog();
                   break;
                 case 'language':
-                  //_buildLanguageDialog();
+                  _buildLanguageDialog();
                   break;
                 case 'logout':
                   _buildLogoutDialog();
@@ -59,25 +59,25 @@ class HomeView extends GetView<HomeController> {
               }
             },
             itemBuilder: (BuildContext context) => [
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'theme',
                 child: ListTile(
-                  leading: Icon(PhosphorIcons.moonFill),
-                  title: Text('Change theme'),
+                  leading: const Icon(PhosphorIcons.moonFill),
+                  title: Text('change_theme'.tr),
                 ),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'language',
                 child: ListTile(
-                  leading: Icon(PhosphorIcons.translate),
-                  title: Text('Change language'),
+                  leading: const Icon(PhosphorIcons.translate),
+                  title: Text('change_language'.tr),
                 ),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'logout',
                 child: ListTile(
-                  leading: Icon(PhosphorIcons.signOut),
-                  title: Text('Logout'),
+                  leading: const Icon(PhosphorIcons.signOut),
+                  title: Text('logout'.tr),
                 ),
               ),
             ],
@@ -120,7 +120,9 @@ class HomeView extends GetView<HomeController> {
                     child: SizedBox(
                       width: Get.width,
                       child: Text(
-                        '${controller.count} words loaded, scroll and see more',
+                        'qty_word_loaded'.trParams({
+                          'value': '${controller.count}',
+                        }),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -145,9 +147,9 @@ class HomeView extends GetView<HomeController> {
                   break;
               }
               return list.isEmpty
-                  ? const Expanded(
+                  ? Expanded(
                       child: Center(
-                        child: Text('No words found.'),
+                        child: Text('no_words'.tr),
                       ),
                     )
                   : Expanded(
@@ -182,7 +184,7 @@ class HomeView extends GetView<HomeController> {
       WillPopScope(
         onWillPop: () async => false,
         child: AlertDialog(
-          title: const Text('Choose theme'),
+          title: Text('choose_theme'.tr),
           content: Obx(
             () => Column(
               mainAxisSize: MainAxisSize.min,
@@ -190,19 +192,19 @@ class HomeView extends GetView<HomeController> {
                 RadioListTile(
                   value: 'light',
                   groupValue: controller.theme,
-                  title: const Text('Light'),
+                  title: Text('light'.tr),
                   onChanged: (value) => controller.theme = value,
                 ),
                 RadioListTile(
                   value: 'dark',
                   groupValue: controller.theme,
-                  title: const Text('Dark'),
+                  title: Text('dark'.tr),
                   onChanged: (value) => controller.theme = value,
                 ),
                 RadioListTile(
                   value: 'system',
                   groupValue: controller.theme,
-                  title: const Text('Match system\'s theme'),
+                  title: Text('match_system'.tr),
                   onChanged: (value) => controller.theme = value,
                 ),
               ],
@@ -214,7 +216,7 @@ class HomeView extends GetView<HomeController> {
                 controller.theme = backupThemeChoice;
                 Get.close(1);
               },
-              child: const Text('Cancel'),
+              child: Text('cancel'.tr),
             ),
             TextButton(
               onPressed: () {
@@ -235,7 +237,73 @@ class HomeView extends GetView<HomeController> {
                 }
                 Get.close(1);
               },
-              child: const Text('Save'),
+              child: Text('save'.tr),
+            ),
+          ],
+        ),
+      ),
+      barrierDismissible: false,
+    );
+  }
+
+  Future<dynamic> _buildLanguageDialog() async {
+    final String? backupLanguageChoice = controller.language;
+
+    return Get.dialog(
+      WillPopScope(
+        onWillPop: () async => false,
+        child: AlertDialog(
+          title: Text('choose_language'.tr),
+          content: Obx(
+            () => Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                RadioListTile(
+                  value: 'en_US',
+                  groupValue: controller.language,
+                  title: const Text('English'),
+                  onChanged: (value) => controller.language = value,
+                ),
+                RadioListTile(
+                  value: 'pt_BR',
+                  groupValue: controller.language,
+                  title: const Text('Português (Brasil)'),
+                  onChanged: (value) => controller.language = value,
+                ),
+                /* RadioListTile(
+                  value: 'es_ES',
+                  groupValue: controller.language,
+                  title: const Text('Español'),
+                  onChanged: (value) => controller.language = value,
+                ), */
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                controller.language = backupLanguageChoice;
+                Get.close(1);
+              },
+              child: Text('cancel'.tr),
+            ),
+            Obx(
+              () => TextButton(
+                onPressed: controller.language == 'pt_BR' ||
+                        controller.language ==
+                            'en_US' /*  ||
+                        controller.language == 'es_ES' */
+                    ? () {
+                        controller.setPreference(
+                          'language',
+                          controller.language,
+                        );
+                        Get.updateLocale(Locale(controller.language as String));
+                        Get.close(1);
+                      }
+                    : null,
+                child: Text('save'.tr),
+              ),
             ),
           ],
         ),
@@ -248,15 +316,15 @@ class HomeView extends GetView<HomeController> {
     return Get.dialog(
       AlertDialog(
         title: const Text('Logout'),
-        content: const Text('Are you sure you want to logout?'),
+        content: Text('sure'.tr),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text('Cancel'),
+            child: Text('cancel'.tr),
           ),
           TextButton(
             onPressed: () => controller.logout(),
-            child: const Text('Logout'),
+            child: Text('logout'.tr),
           ),
         ],
       ),

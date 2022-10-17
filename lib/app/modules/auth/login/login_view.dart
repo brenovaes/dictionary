@@ -81,9 +81,9 @@ class LoginView extends GetView<LoginController> {
                             validator: (value) =>
                                 controller.validateUsername(value),
                             decoration: InputDecoration(
-                              labelText: "Username",
+                              labelText: 'username'.tr,
                               errorText: controller.credentialError.value
-                                  ? 'Invalid credentials'
+                                  ? 'invalid_credentials'.tr
                                   : null,
                             ),
                             inputFormatters: [
@@ -109,7 +109,7 @@ class LoginView extends GetView<LoginController> {
                                     ? const Icon(PhosphorIcons.eyeClosed)
                                     : const Icon(PhosphorIcons.eye),
                               ),
-                              labelText: "Password",
+                              labelText: 'password'.tr,
                             ),
                           ),
                         ),
@@ -127,7 +127,7 @@ class LoginView extends GetView<LoginController> {
                                 controller.attemptSignin();
                               }
                             },
-                            child: const Text('Login'),
+                            child: Text('login'.tr),
                           ),
                         ),
                         const SizedBox(
@@ -143,16 +143,16 @@ class LoginView extends GetView<LoginController> {
                                 final result = await Get.toNamed(Routes.SIGNUP);
                                 if (result == true) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
+                                    SnackBar(
                                       content: Text(
-                                        'Account created! Use your credentials to signin.',
+                                        'account_created'.tr,
                                       ),
                                     ),
                                   );
                                 }
                               },
-                              child: const Text(
-                                'Create account',
+                              child: Text(
+                                'create_account'.tr,
                               ),
                             ),
                           ),

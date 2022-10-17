@@ -51,9 +51,9 @@ class WordCard extends StatelessWidget {
                 await _showModal(context, data['body'], false);
                 _refreshLists();
               } else if (data['status'] == false) {
-                const snackBar = SnackBar(
+                var snackBar = SnackBar(
                   content: Text(
-                    'No definition found for this word/phrase.',
+                    'no_definition'.tr,
                   ),
                 );
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);

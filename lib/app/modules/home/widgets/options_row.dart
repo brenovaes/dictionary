@@ -11,9 +11,9 @@ class OptionsRow extends StatelessWidget {
   final HomeController controller = Get.find();
 
   final List<String> chipsLabels = [
-    'Words list',
-    'History',
-    'Favorites',
+    'words_list'.tr,
+    'history'.tr,
+    'favorites'.tr,
   ];
 
   @override
@@ -22,10 +22,12 @@ class OptionsRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: List.generate(
         chipsLabels.length,
-        (index) => CustomChoiceChip(
-          controller: controller,
-          chipsLabels: chipsLabels,
-          index: index,
+        (index) => Expanded(
+          child: CustomChoiceChip(
+            controller: controller,
+            chipsLabels: chipsLabels,
+            index: index,
+          ),
         ),
       ),
     );
