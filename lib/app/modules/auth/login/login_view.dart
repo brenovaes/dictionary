@@ -110,6 +110,9 @@ class LoginView extends GetView<LoginController> {
                                     : const Icon(PhosphorIcons.eye),
                               ),
                               labelText: 'password'.tr,
+                              errorText: controller.credentialError.value
+                                  ? 'invalid_credentials'.tr
+                                  : null,
                             ),
                           ),
                         ),

@@ -2,7 +2,7 @@
     package="dev.brenovaes.dictionary">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="dictionary"
+        android:label="Dictionary"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

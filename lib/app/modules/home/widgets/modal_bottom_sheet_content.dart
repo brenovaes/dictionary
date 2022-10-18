@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:dictionary/app/core/ui/constants_ui.dart';
 import 'package:dictionary/app/models/dictionary_word_model.dart';
 import 'package:dictionary/app/modules/home/home_controller.dart';
@@ -9,8 +11,8 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:collection/collection.dart';
 
 class ModalBottomSheetContent extends StatefulWidget {
-  DictionaryWord item;
-  HomeController controller;
+  final DictionaryWord item;
+  final HomeController controller;
   bool isFavorited;
 
   ModalBottomSheetContent({
@@ -195,6 +197,7 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
                 Column(
                   children: widget.item.meanings.mapIndexed((index, meaning) {
                     return ExpansionTile(
+                      textColor: Colors.grey,
                       expandedAlignment: Alignment.centerLeft,
                       expandedCrossAxisAlignment: CrossAxisAlignment.start,
                       childrenPadding: const EdgeInsets.all(8),
