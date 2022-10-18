@@ -38,7 +38,7 @@ $ git clone https://github.com/brenovaes/dictionary.git
 $ cd dictionary
 
 # Rodar o projeto.
-$ flutter pub run
+$ flutter run
 ```
 
 > This is a challenge by [Coodesh](https://coodesh.com/)
