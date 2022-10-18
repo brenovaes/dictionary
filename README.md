@@ -17,6 +17,8 @@ Este é um aplicativo desenvolvido para ajudá-lo a ter acesso rápido a palavra
 - [JustAudio][just_audio] - Player de áudio
 - [Phosphor Icons][phosphor] - Pacote de ícones
 
+### Apresentação
+- [Vídeo][video] (Loom)
 
 [flutter]: https://flutter.dev
 [get]: https://pub.dev/packages/get
@@ -24,6 +26,7 @@ Este é um aplicativo desenvolvido para ajudá-lo a ter acesso rápido a palavra
 [hive]: https://pub.dev/packages/hive
 [just_audio]: https://pub.dev/packages/just_audio
 [phosphor]: https://phosphoricons.com/
+[video]: https://www.loom.com/share/56f9925984d54f5290390848c6c9a52a
 
 
 ### Executando o projeto
